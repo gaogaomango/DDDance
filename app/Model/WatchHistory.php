@@ -1,5 +1,5 @@
 <?php 
-class Watch_history extends AppModel {
+class WatchHistory extends AppModel {
     public $validate = array(
         'title' => array(
             'rule' => 'notEmpty'

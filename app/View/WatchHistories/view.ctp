@@ -4,7 +4,7 @@
 
 <p><small>Created: <?php echo $watch_history['Watch_history']['created']; ?></small></p>
 
-<p><?php echo h($watch_history['watch_history']['body']); ?></p>
+<p><?php echo h($watch_history['Watch_history']['body']); ?></p>
 
     <tr>
         <td><?php echo $watch_histories[0]['Movie']['id']; ?></td>

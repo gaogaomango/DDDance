@@ -1,20 +1,20 @@
 <?php
-class Watch_historiesController extends AppController {
+class WatchHistoriesController extends AppController {
     public $helpers = array('Html', 'Form');
 
     public $components = array('Session');
 
-    public $uses = array('Movie','User','Genre');
+    public $uses = array('WatchHistory','User','Genre');
 
     public function index() {
-    	$movies = $this->Movie->find('all');
+    	$watchhistories = $this->WatchHistory->find('all');
 
         // Categoryモデルを使ってデータを取得
         $users = $this->User->find('all');
 
         $genres = $this->Genre->find('all');
 
-    	$this->set(compact('movies', 'users', 'genres'));
+    	$this->set(compact('watchhistories', 'users', 'genres'));
 
         //$this->set('posts', $this->Post->find('all'));
     }
@@ -37,53 +37,53 @@ class Watch_historiesController extends AppController {
             throw new NotFoundException(__('Invalid post'));
         }
 
-        $movie = $this->Movie->findById($id);
-        if (!$movie) {
+        $wathchhistory = $this->WathchHistory->findById($id);
+        if (!$wathchhistory) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $this->set('movie', $movie);
+        $this->set('wathchhistory', $wathchhistory);
     }
 
    public function add() {
    //     $this->layout = 'changePractice';
-        $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-        $this->set('Genres', $Genres);
+        // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+        // $this->set('Genres', $Genres);
 
         if ($this->request->is('post')) {
-            $this->Movie->create();
+            $this->Wathch_history->create();
             debug($this->request->data);
-            if ($this->Movie->save($this->request->data)) {
-                $this->Session->setFlash(__('The Movie has been saved.'));
+            if ($this->WathchHistory->save($this->request->data)) {
+                $this->Session->setFlash(__('The Wathch_History has been saved.'));
                 return $this->redirect(array('action' => 'index'));
             }
-            $this->Session->setFlash(__('Unable to add the Movie.'));
+            $this->Session->setFlash(__('Unable to add the Wathch_History.'));
         }
     }
 
 public function edit($id = null) {
-        $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-        $this->set('Genres', $Genres);
+        // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+        // $this->set('Genres', $Genres);
         
     if (!$id) {
-        throw new NotFoundException(__('Invalid movie'));
+        throw new NotFoundException(__('Invalid watch_history'));
     }
 
-    $movie = $this->Movie->findById($id);
-    if (!$movie) {
-        throw new NotFoundException(__('Invalid movie'));
+    $watchhistory = $this->WatchHistory->findById($id);
+    if (!$watchhistory) {
+       throw new NotFoundException(__('Invalid watch_history'));
     }
 
-    if ($this->request->is(array('movie', 'put'))) {
-        $this->Movie->id = $id;
-        if ($this->Movie->save($this->request->data)) {
-            $this->Session->setFlash(__('The Movie has been updated.'));
+    if ($this->request->is(array('watch_history', 'put'))) {
+        $this->WatchHistory->id = $id;
+        if ($this->WatchHistory->save($this->request->data)) {
+            $this->Session->setFlash(__('The Watch_History has been updated.'));
             return $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Unable to update the Movie.'));
+        $this->Session->setFlash(__('Unable to update the Watch_History.'));
     }
 
     if (!$this->request->data) {
-        $this->request->data = $movie;
+        $this->request->data = $watchhistory;
     }
 }
 
@@ -92,7 +92,7 @@ public function delete($id) {
         throw new MethodNotAllowedException();
     }
 
-    if ($this->Movie->delete($id)) {
+    if ($this->WatchHistory->delete($id)) {
         $this->Session->setFlash(__('The user with id: %s has been deleted.', h($id)));
         return $this->redirect(array('action' => 'index'));
     }
