@@ -52,7 +52,7 @@ class MoviesController extends AppController {
         if ($this->request->is('post')) {
             $this->Movie->create();
             debug($this->request->data);
-            debug($_FILES);
+            // debug($_FILES);
             
             if (is_uploaded_file($this->request->data['Movie']['thumbnail']['tmp_name'])) {
 
