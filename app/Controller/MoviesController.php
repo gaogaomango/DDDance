@@ -16,6 +16,9 @@ class MoviesController extends AppController {
 
     	$this->set(compact('movies', 'users', 'genres'));
 
+        $checkuser = $this->Auth->user('username');
+        $this->set('checkuser', $checkuser);
+
         //$this->set('posts', $this->Post->find('all'));
     }
 

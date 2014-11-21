@@ -1,5 +1,5 @@
 <?php 
-class Movie extends AppModel {
+class Favarite extends AppModel {
     public $validate = array(
         'title' => array(
             'rule' => 'notEmpty'
@@ -9,9 +9,10 @@ class Movie extends AppModel {
         )
     );
 
-      public $belongsTo = array('Genre','User');
-      public $hasMany = array('Comment','Watch_history','Good');
+    public $belongsTo = array('Movie','User');
+    // public $hasMany = 'Comment';
     // public $hasMany = 'Favarite';
     // public $hasMany = 'Good';
+    // public $hasMany = 'Watch_history';
 }
 ?>

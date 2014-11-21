@@ -1,20 +1,20 @@
 <?php
-class WatchHistoriesController extends AppController {
+class FavaritesController extends AppController {
     public $helpers = array('Html', 'Form');
 
     public $components = array('Session');
 
-    public $uses = array('WatchHistory','User','Genre');
+    public $uses = array('Favarite','User','Genre');
 
     public function index() {
-    	$watchhistories = $this->WatchHistory->find('all');
+    	$favarites = $this->Favarite->find('all');
 
         // Categoryモデルを使ってデータを取得
         $users = $this->User->find('all');
 
         $genres = $this->Genre->find('all');
 
-    	$this->set(compact('watchhistories', 'users', 'genres'));
+    	$this->set(compact('favarites', 'users', 'genres'));
 
         //$this->set('posts', $this->Post->find('all'));
     }
@@ -37,11 +37,11 @@ class WatchHistoriesController extends AppController {
             throw new NotFoundException(__('Invalid post'));
         }
 
-        $wathchhistory = $this->WathchHistory->findById($id);
-        if (!$wathchhistory) {
+        $favarite = $this->Favarite->findById($id);
+        if (!$favarite) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $this->set('wathchhistory', $wathchhistory);
+        $this->set('favarite', $favarite);
     }
 
    public function add() {
@@ -50,13 +50,13 @@ class WatchHistoriesController extends AppController {
         // $this->set('Genres', $Genres);
 
         if ($this->request->is('post')) {
-            $this->Wathchhistory->create();
+            $this->Favarite->create();
             debug($this->request->data);
-            if ($this->WathchHistory->save($this->request->data)) {
-                $this->Session->setFlash(__('The Wathch_History has been saved.'));
+            if ($this->Favarite->save($this->request->data)) {
+                $this->Session->setFlash(__('The Favarite has been saved.'));
                 return $this->redirect(array('action' => 'index'));
             }
-            $this->Session->setFlash(__('Unable to add the Wathch_History.'));
+            $this->Session->setFlash(__('Unable to add the Favarite.'));
         }
     }
 
@@ -65,25 +65,25 @@ public function edit($id = null) {
         // $this->set('Genres', $Genres);
         
     if (!$id) {
-        throw new NotFoundException(__('Invalid watch_history'));
+        throw new NotFoundException(__('Invalid favarite'));
     }
 
-    $watchhistory = $this->WatchHistory->findById($id);
-    if (!$watchhistory) {
-       throw new NotFoundException(__('Invalid watch_history'));
+    $favarite = $this->Favarite->findById($id);
+    if (!$favarite) {
+       throw new NotFoundException(__('Invalid favarite'));
     }
 
-    if ($this->request->is(array('watch_history', 'put'))) {
-        $this->WatchHistory->id = $id;
-        if ($this->WatchHistory->save($this->request->data)) {
-            $this->Session->setFlash(__('The Watch_History has been updated.'));
+    if ($this->request->is(array('favarite', 'put'))) {
+        $this->Favarite->id = $id;
+        if ($this->Favarite->save($this->request->data)) {
+            $this->Session->setFlash(__('The Favarite has been updated.'));
             return $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Unable to update the Watch_History.'));
+        $this->Session->setFlash(__('Unable to update the Favarite.'));
     }
 
     if (!$this->request->data) {
-        $this->request->data = $watchhistory;
+        $this->request->data = $favarite;
     }
 }
 
@@ -92,7 +92,7 @@ public function delete($id) {
         throw new MethodNotAllowedException();
     }
 
-    if ($this->WatchHistory->delete($id)) {
+    if ($this->Favarite->delete($id)) {
         $this->Session->setFlash(__('The user with id: %s has been deleted.', h($id)));
         return $this->redirect(array('action' => 'index'));
     }

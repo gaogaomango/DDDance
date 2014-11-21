@@ -16,6 +16,8 @@
         <th>Action</th>
         <th>Created</th>
         <th>Modified</th>
+        <th>Good!!</th>
+        <th>Good_Number</th>
     </tr>
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
@@ -30,7 +32,8 @@
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
         <td><?php echo $this->Html->link($movie['Movie']['thumbnail'], array('action' => 'view', $movie['Movie']['id'])); ?>
-        <!--仮 <td><?php echo $movie['Movie']['movie_tag'];?></td> -->
+    <!-- 仮 -->
+        <td><?php echo $movie['Movie']['movie_tag'];?></td> 
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
         <td>
@@ -41,6 +44,19 @@
         </td>
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>
+        <td><?php 
+            if($checkuser == 'adminuser'){
+                echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
+            }else{
+                echo 'Good!!';
+        }
+        ?>
+        <td><?php if(isset($movie['Good'])){
+            echo count($movie['Good']);
+            }else{
+                echo '0';
+            }
+             ?></td>
     </tr>
 <?php endforeach; ?>
 <?php unset($movie); ?>

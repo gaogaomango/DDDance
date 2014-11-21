@@ -11,8 +11,8 @@ class User extends AppModel {
             'rule' => 'notEmpty'
         )
     );
-    public $belongsTo = 'Group';
-    public $hasMany = array('Movie','Comment','Watch_history');
+    public $belongsTo = array('Group');
+    public $hasMany = array('Movie','Comment','Watch_history','Good');
 
 	public $actsAs = array('Acl' => array('type' => 'requester'));
     
