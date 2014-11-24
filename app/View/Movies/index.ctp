@@ -32,6 +32,7 @@
         <td><?php echo $movie['User']['id']; ?></td>
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
+        <img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>">
         <td><?php echo $this->Html->link($movie['Movie']['thumbnail'], array('action' => 'view', $movie['Movie']['id'], $movie['User']['id'])); ?>
         </td>
     <!-- 仮 -->

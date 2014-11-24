@@ -68,66 +68,71 @@ class MoviesController extends AppController {
             $this->Movie->create();
             debug($this->request->data);
             // debug($_FILES);
-            
-            if (is_uploaded_file($this->request->data['Movie']['thumbnail']['tmp_name'])) {
-
-            if (move_uploaded_file($this->request->data['Movie']['thumbnail']['tmp_name'], 'files/' . $this->request->data['Movie']['thumbnail']['name'])) {
-                 chmod('files/' . $this->request->data['Movie']['thumbnail']['name'], 0644);
-                 echo $this->request->data['Movie']['thumbnail']['name'] . 'をアップロードしました。';
-                } else {
-                echo 'ファイルをアップロードできません。';
-                }
-                } else {
-                echo 'ファイルが選択されていません。';
-                }
 
             if ($this->Movie->save($this->request->data)) {
-
                 $this->Session->setFlash(__('The Movie has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                // return $this->redirect(array('action' => 'index'));
+            }
+
+        // idでファイル名を作成
+        
+        $last_id = $this->Movie->getLastInsertID();
+
+        $new_file_name = 'P'.str_pad($last_id, 5, '0', STR_PAD_LEFT);
+
+        if (is_uploaded_file($this->request->data['Movie']['upfile']['tmp_name'])) {
+        //　左のファイルを右の場所に.以降の名前で保存する。 
+            if(move_uploaded_file($this->request->data['Movie']['upfile']['tmp_name'],'/var/www/html/DDDance/app/webroot/files/'.$new_file_name)){
+                // chmod('files/' . $this->request->data['Movie']['thumbnail']['name'], 0644);
+            echo 'アップロードしました。';
+            } else {
+            echo 'ファイルをアップロードできません。';
+             }
+            } else {
+            echo 'ファイルが選択されていません。';
             }
 
             $this->Session->setFlash(__('Unable to add the Movie.'));
         }
     }
 
-public function edit($id = null) {
-        $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-        $this->set('Genres', $Genres);
+    public function edit($id = null) {
+            $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+            $this->set('Genres', $Genres);
 
-    if (!$id) {
-        throw new NotFoundException(__('Invalid movie'));
+        if (!$id) {
+            throw new NotFoundException(__('Invalid movie'));
+        }
+
+        $movie = $this->Movie->findById($id);
+        if (!$movie) {
+            throw new NotFoundException(__('Invalid movie'));
+        }
+
+        if ($this->request->is(array('movie', 'put'))) {
+            $this->Movie->id = $id;
+            if ($this->Movie->save($this->request->data)) {
+                $this->Session->setFlash(__('The Movie has been updated.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+            $this->Session->setFlash(__('Unable to update the Movie.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $movie;
+        }
     }
 
-    $movie = $this->Movie->findById($id);
-    if (!$movie) {
-        throw new NotFoundException(__('Invalid movie'));
-    }
+    public function delete($id) {
+        if ($this->request->is('get')) {
+            throw new MethodNotAllowedException();
+        }
 
-    if ($this->request->is(array('movie', 'put'))) {
-        $this->Movie->id = $id;
-        if ($this->Movie->save($this->request->data)) {
-            $this->Session->setFlash(__('The Movie has been updated.'));
+        if ($this->Movie->delete($id)) {
+            $this->Session->setFlash(__('The user with id: %s has been deleted.', h($id)));
             return $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Unable to update the Movie.'));
     }
-
-    if (!$this->request->data) {
-        $this->request->data = $movie;
-    }
-}
-
-public function delete($id) {
-    if ($this->request->is('get')) {
-        throw new MethodNotAllowedException();
-    }
-
-    if ($this->Movie->delete($id)) {
-        $this->Session->setFlash(__('The user with id: %s has been deleted.', h($id)));
-        return $this->redirect(array('action' => 'index'));
-    }
-}
 
 }
 ?>
