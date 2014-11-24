@@ -3,7 +3,6 @@
 <h1>Favarite</h1>
 <table>
     <tr>
-        <th>Id</th>
         <th>User_ID</th>
         <th>Genre_ID</th>
         <th>Movie_Name</th>
@@ -12,6 +11,9 @@
         <th>Created</th>
     </tr>
 
+    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
+
+
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
     <?php foreach ($favarites as $favarite): 
@@ -19,7 +21,6 @@
 
     ?>
     <tr>
-        <td><?php echo $favarite['Movie']['name']; ?></td>
         <td><?php echo $favarite['User']['id']; ?></td>
         <td><?php echo $favarite['Movie']['genre_id'];?></td>
         <td><?php echo $favarite['Movie']['movie_name'];?></td>

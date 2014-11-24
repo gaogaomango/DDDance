@@ -4,7 +4,7 @@ class FavaritesController extends AppController {
 
     public $components = array('Session');
 
-    public $uses = array('Favarite','User','Genre');
+    public $uses = array('Favarite','User','Movie');
 
     public function index() {
     	$favarites = $this->Favarite->find('all');
@@ -12,9 +12,9 @@ class FavaritesController extends AppController {
         // Categoryモデルを使ってデータを取得
         $users = $this->User->find('all');
 
-        $genres = $this->Genre->find('all');
+        $movies = $this->Movie->find('all');
 
-    	$this->set(compact('favarites', 'users', 'genres'));
+    	$this->set(compact('favarites', 'users', 'movies'));
 
         //$this->set('posts', $this->Post->find('all'));
     }
@@ -44,17 +44,26 @@ class FavaritesController extends AppController {
         $this->set('favarite', $favarite);
     }
 
-   public function add() {
+   public function add($movie_id) {
    //     $this->layout = 'changePractice';
         // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
         // $this->set('Genres', $Genres);
 
+        if ($this->request->is('get')) {
+        throw new MethodNotAllowedException();
+        }
+
         if ($this->request->is('post')) {
-            $this->Favarite->create();
-            debug($this->request->data);
-            if ($this->Favarite->save($this->request->data)) {
-                $this->Session->setFlash(__('The Favarite has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+            $this->Favarite->create('Favarite');
+            // debug($this->request->data);
+
+            $this->request->data['Favarite']['movie_id'] = $movie_id;
+            $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
+
+
+        if ($this->Favarite->save($this->request->data)) {
+            $this->Session->setFlash(__('The Favarite has been saved.'));
+              return $this->redirect(array('controller' =>'movies', 'action' => 'index'));
             }
             $this->Session->setFlash(__('Unable to add the Favarite.'));
         }
