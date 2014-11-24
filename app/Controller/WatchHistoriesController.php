@@ -37,11 +37,11 @@ class WatchHistoriesController extends AppController {
             throw new NotFoundException(__('Invalid post'));
         }
 
-        $wathchhistory = $this->WathchHistory->findById($id);
-        if (!$wathchhistory) {
+        $watchhistory = $this->WatchHistory->findById($id);
+        if (!$watchhistory) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $this->set('wathchhistory', $wathchhistory);
+        $this->set('watchhistory', $watchhistory);
     }
 
    public function add() {
@@ -50,13 +50,13 @@ class WatchHistoriesController extends AppController {
         // $this->set('Genres', $Genres);
 
         if ($this->request->is('post')) {
-            $this->Wathchhistory->create();
+            $this->Watchhistory->create();
             debug($this->request->data);
-            if ($this->WathchHistory->save($this->request->data)) {
+            if ($this->WatchHistory->save($this->request->data)) {
                 $this->Session->setFlash(__('The Wathch_History has been saved.'));
                 return $this->redirect(array('action' => 'index'));
             }
-            $this->Session->setFlash(__('Unable to add the Wathch_History.'));
+            $this->Session->setFlash(__('Unable to add the Watch_History.'));
         }
     }
 

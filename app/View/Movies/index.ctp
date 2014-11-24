@@ -31,7 +31,7 @@
         <td><?php echo $movie['Movie']['id']; ?></td>
         <td><?php echo $movie['User']['id']; ?></td>
         <td><?php echo $movie['Genre']['genre_title'];?></td>
-        <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'], $movie['User']['id'])); ?>
+        <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
         <td><?php echo $this->Html->link($movie['Movie']['thumbnail'], array('action' => 'view', $movie['Movie']['id'], $movie['User']['id'])); ?>
         </td>
     <!-- 仮 -->

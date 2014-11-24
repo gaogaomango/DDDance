@@ -4,7 +4,7 @@ class MoviesController extends AppController {
 
     public $components = array('Session');
 
-    public $uses = array('Movie','User','Genre');
+    public $uses = array('Movie','User','Genre', 'WatchHistory');
 
     public function index() {
     	$movies = $this->Movie->find('all');
@@ -15,7 +15,8 @@ class MoviesController extends AppController {
         $genres = $this->Genre->find('all');
 
     	$this->set(compact('movies', 'users', 'genres'));
-
+    
+    // ユーザーネームの確認用変数 
         $checkuser = $this->Auth->user('username');
         $this->set('checkuser', $checkuser);
 
@@ -35,12 +36,23 @@ class MoviesController extends AppController {
 
     // }
 
-    public function view($id = null) {
-        if (!$id) {
+    public function view($movie_id = null) {
+        $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
+       // $this->set('checkuser', $checkuser);
+       
+        $WatchHistory['WatchHistory'] = array(
+            'movie_id' => $movie_id,
+            'user_id' => $this->Auth->user('id'),
+            'created' => null
+            );
+
+        $this->WatchHistory->save($WatchHistory);
+
+        if (!$movie_id) {
             throw new NotFoundException(__('Invalid post'));
         }
 
-        $movie = $this->Movie->findById($id);
+        $movie = $this->Movie->findById($movie_id);
         if (!$movie) {
             throw new NotFoundException(__('Invalid post'));
         }
