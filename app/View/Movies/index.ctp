@@ -1,7 +1,14 @@
 <!-- File: /app/View/Users/index.ctp -->
 <?php //debug($posts); ?>
 <h1>Movie</h1>
-<p><?php echo $this->Html->link("Add Movie", array('action' => 'add')); ?></p>
+    <td><?php 
+        if($checkuser == 'adminuser'){
+            echo $this->Html->link('Add Movie', array('action' => 'add'));
+        }else{
+            echo 'Add Movie';
+    }
+    ?>
+    </td>
 <table>
     <tr>
         <th>Id</th>

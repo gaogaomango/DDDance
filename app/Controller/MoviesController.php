@@ -23,19 +23,6 @@ class MoviesController extends AppController {
         //$this->set('posts', $this->Post->find('all'));
     }
 
-    // public function category_index($category_id = null) {
-    //     $posts = $this->Post->find('all',array('conditions' => array('category_id' => $category_id)));
-
-    //     //選択されたカテゴリーのデータを取得しておく
-    //     $selectedCategory = $this->Category->find('all',array('conditions'=> array('id' => $category_id)));
-
-    //     // Categoryモデルを使ってデータを取得
-    //     $categories = $this->Category->find('all');
-
-    //     $this->set(compact('posts', 'categories', 'selectedCategory'));
-
-    // }
-
     public function view($movie_id = null) {
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
@@ -48,6 +35,21 @@ class MoviesController extends AppController {
 
         $this->WatchHistory->save($WatchHistory);
 
+
+// 要変更箇所！！！！！！！！！！！！！！！！！！！！！！
+        // 更新する内容を設定
+        // $Play_counts = $this->Movie->find('all', array('fields' => array('id', 'play_count')));
+        // $Play_counts = $Play_counts + 1;
+        // $this->set('Play_counts', $Play_counts);
+ 
+        // 更新する項目（フィールド指定）
+        // $fields = array('play_count');
+ 
+        // 更新
+        $this->Movie->update('all', array('fields' => array('id', 'play_count')));
+         // $this->Movie->save($play_count);
+        $this->request->data['Movie']['play_count'] = 'play_count' + 1;
+        
         if (!$movie_id) {
             throw new NotFoundException(__('Invalid post'));
         }
