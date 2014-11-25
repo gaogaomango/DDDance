@@ -44,12 +44,26 @@ class MoviesController extends AppController {
  
         // 更新する項目（フィールド指定）
         // $fields = array('play_count');
+
+        // 更新する内容を設定
+//         $data = array('Movie' => array('id' => $movie_id, 'play_count' => ++1));
+ 
+// // 更新する項目（フィールド指定）
+// $fields = array('play_count');
+ 
+// // 更新
+// $this->Movie->save($data, false, $fields);
  
         // 更新
+        // if(isset($this->Movie->data['Movie']['play_count'])) {
+        //     $num = (int)$this->Movie->data['Movie']['play_count'];
+        //     $num++;
+        // }
         $this->Movie->update('all', array('fields' => array('id', 'play_count')));
          // $this->Movie->save($play_count);
         $this->request->data['Movie']['play_count'] = 'play_count' + 1;
-        
+        // ーーーーーーーー＞＞＞＞＞＞＞＞＞ここまで
+
         if (!$movie_id) {
             throw new NotFoundException(__('Invalid post'));
         }
@@ -135,6 +149,21 @@ class MoviesController extends AppController {
             return $this->redirect(array('action' => 'index'));
         }
     }
+
+    public function embTag($src){
+    $emb1 = strstr($src, "v=");
+    $ampersand = strpos($emb1, "&") ;
+    
+        if($ampersand){
+            $emb2 = mb_substr($emb1, 0, $ampersand);
+        }else{
+            $emb2 = $emb1;
+        }
+    $emb = mb_substr($emb2, 2);
+    return $emb;
+    $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$embCode.'" frameborder="0" allowfullscreen></iframe> ';
+
+}
 
 }
 ?>
