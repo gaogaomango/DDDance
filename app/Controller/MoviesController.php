@@ -36,33 +36,39 @@ class MoviesController extends AppController {
         $this->WatchHistory->save($WatchHistory);
 
 
-// 要変更箇所！！！！！！！！！！！！！！！！！！！！！！
-        // 更新する内容を設定
-        // $Play_counts = $this->Movie->find('all', array('fields' => array('id', 'play_count')));
-        // $Play_counts = $Play_counts + 1;
-        // $this->set('Play_counts', $Play_counts);
+// // 要変更箇所！！！！！！！！！！！！！！！！！！！！！！
+//         // 更新する内容を設定
+//         // $Play_counts = $this->Movie->find('all', array('fields' => array('id', 'play_count')));
+//         // $Play_counts = $Play_counts + 1;
+//         // $this->set('Play_counts', $Play_counts);
  
-        // 更新する項目（フィールド指定）
-        // $fields = array('play_count');
+//         // 更新する項目（フィールド指定）
+//         // $fields = array('play_count');
 
-        // 更新する内容を設定
-//         $data = array('Movie' => array('id' => $movie_id, 'play_count' => ++1));
+//         // 更新する内容を設定
+// //         $data = array('Movie' => array('id' => $movie_id, 'play_count' => ++1));
  
-// // 更新する項目（フィールド指定）
-// $fields = array('play_count');
+// // // 更新する項目（フィールド指定）
+// // $fields = array('play_count');
  
-// // 更新
-// $this->Movie->save($data, false, $fields);
+// // // 更新
+// // $this->Movie->save($data, false, $fields);
  
-        // 更新
-        // if(isset($this->Movie->data['Movie']['play_count'])) {
-        //     $num = (int)$this->Movie->data['Movie']['play_count'];
-        //     $num++;
-        // }
-        $this->Movie->update('all', array('fields' => array('id', 'play_count')));
-         // $this->Movie->save($play_count);
-        $this->request->data['Movie']['play_count'] = 'play_count' + 1;
-        // ーーーーーーーー＞＞＞＞＞＞＞＞＞ここまで
+//         // 更新
+//         // if(isset($this->Movie->data['Movie']['play_count'])) {
+//         //     $num = (int)$this->Movie->data['Movie']['play_count'];
+//         //     $num++;
+//         // }
+        $fields = array(
+            'Play_count' => 'play_count+1' 
+            );
+        $conditions = array(
+            'Movie.id' => $movie_id
+            );
+         $this->Movie->updateAll($fields, $conditions);
+//          // $this->Movie->save($play_count);
+         // $this->request->data['Movie']['play_count'] = 'play_count' + 1;
+//         // ーーーーーーーー＞＞＞＞＞＞＞＞＞ここまで
 
         if (!$movie_id) {
             throw new NotFoundException(__('Invalid post'));
@@ -84,6 +90,7 @@ class MoviesController extends AppController {
             $this->Movie->create();
             debug($this->request->data);
             // debug($_FILES);
+            $this->request->data['Movie']['movie_tag'] = $this->_embTag($this->request->data['Movie']['movie_tag']);
 
             if ($this->Movie->save($this->request->data)) {
                 $this->Session->setFlash(__('The Movie has been saved.'));
@@ -150,7 +157,7 @@ class MoviesController extends AppController {
         }
     }
 
-    public function embTag($src){
+    function _embTag($src){
     $emb1 = strstr($src, "v=");
     $ampersand = strpos($emb1, "&") ;
     
@@ -160,8 +167,8 @@ class MoviesController extends AppController {
             $emb2 = $emb1;
         }
     $emb = mb_substr($emb2, 2);
-    return $emb;
-    $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$embCode.'" frameborder="0" allowfullscreen></iframe> ';
+    //return $emb;
+    return $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$emb.'" frameborder="0" allowfullscreen></iframe> ';
 
 }
 

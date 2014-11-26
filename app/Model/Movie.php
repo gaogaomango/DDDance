@@ -10,7 +10,7 @@ class Movie extends AppModel {
     );
 
       public $belongsTo = array('Genre','User');
-      public $hasMany = array('Comment','Watch_history','Good');
+      public $hasMany = array('Comment', 'Watch_history', 'Good');
     // public $hasMany = 'Favarite';
     // public $hasMany = 'Good';
 }

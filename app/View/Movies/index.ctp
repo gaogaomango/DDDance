@@ -15,8 +15,8 @@
         <th>User_ID</th>
         <th>Genre_ID</th>
         <th>Movie_Name</th>
-        <th>Movie_tag</th>
         <th>Thumbnail</th>
+        <th>Movie_tag</th>
         <th>discription</th>
         <th>Play_count</th>
         <th>Action</th>
@@ -39,13 +39,20 @@
         <td><?php echo $movie['User']['id']; ?></td>
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
-        <img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>">
-        <td><?php echo $this->Html->link($movie['Movie']['thumbnail'], array('action' => 'view', $movie['Movie']['id'], $movie['User']['id'])); ?>
-        </td>
+        <td><img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>"></td>
     <!-- 仮 -->
-        <td><?php echo $movie['Movie']['movie_tag'];?></td> 
+        <td><?php echo $this->Html->link($movie['Movie']['movie_tag'], array('action' => 'view', $movie['Movie']['id'])); ?>    
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
+<!--         <td><?php if(isset($movie['Watch_history'])){
+            echo '再生回数 : ';
+            echo count($movie['Watch_history']);
+            echo '回';
+            }else{
+                echo '0だよーん';
+            }
+             ?>
+        </td> -->
         <td>
             <?php echo $this->Html->link('Edit', array('action' => 'edit', $movie['Movie']['id'])); ?>
         </td>

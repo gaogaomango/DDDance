@@ -14,6 +14,15 @@
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['movie_tag'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
+<!--         <td><?php if(isset($movie['Watch_history'])){
+            echo '再生回数 : ';
+            echo count($movie['Watch_history']);
+            echo '回';
+            }else{
+                echo '0だよーん';
+            }
+             ?>
+        </td> -->
         <td>
             <?php 
             if($userSession['username'] == 'administrator'){

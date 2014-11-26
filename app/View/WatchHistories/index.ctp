@@ -26,10 +26,10 @@
         <td><?php echo $watchhistory['User']['id']; ?></td>
         <td><?php echo $watchhistory['Movie']['genre_id'];?></td>
         <td><?php echo $watchhistory['Movie']['movie_name'];?></td>
-         <td><?php echo $this->Html->link($watchhistory['Movie']['movie_tag'], array('action' => 'view', $watch_history['Movie']['movie_tag'])); ?>
+        <td><?php echo $this->Html->link($watchhistory['Movie']['movie_tag'], array('controller' => 'movies', 'action' => 'view', $watchhistory['Movie']['id'])); ?> </td>
         <td><?php echo $watchhistory['Movie']['movie_tag'];?></td>
         <td><?php echo $watchhistory['Movie']['play_count'];?></td>
-        <td><?php echo $watchhistory['watch_history']['created']; ?></td>
+        <td><?php echo $watchhistory['WatchHistory']['created']; ?></td>
     </tr>
 <?php endforeach; ?>
 <?php // unset($watch_history); ?>
