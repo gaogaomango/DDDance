@@ -2,7 +2,16 @@
 class MoviesController extends AppController {
     public $helpers = array('Html', 'Form');
 
-    public $components = array('Session');
+    public $components = array('Session','Search.Prg');
+    public $presetVars = true;
+
+// 検索機能の&とorを手動で切り替える方法 
+    // array(
+    //     'keyword' => array('type' => 'value', 'empty' => true, 'encode' => true),
+    //     'andor' => array('type' => 'value', 'empty' => true, 'encode' => true),
+    //     'from' => array('type' => 'value', 'empty' => true, 'encode' => true),
+    //     'to' => array('type' => 'value', 'empty' => true, 'encode' => true),
+    // );
 
     public $uses = array('Movie','User','Genre', 'WatchHistory');
 
@@ -21,6 +30,25 @@ class MoviesController extends AppController {
         $this->set('checkuser', $checkuser);
 
         //$this->set('posts', $this->Post->find('all'));
+    
+        $this->Movie->recursive = 0;
+        $this->Prg->commonProcess();
+        $req = $this->passedArgs;
+
+        // if (!empty($this->request->data['Movie']['keyword'])) {
+        //     $andor = !empty($this->request->data['Movie']['andor']) ? $this->request->data['Movie']['andor'] : null;
+        //     $word = $this->Movie->multipleKeywords($this->request->data['Movie']['keyword'], $andor);
+        //     $req = array_merge($req, array("word" => $word));
+        // }
+
+        $this->paginate = array(
+            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+        );
+        $this->set('movies', $this->paginate());
+
+        $movie_names = $this->Movie->find('list');
+        $this->set(compact('movie_names'));
+
     }
 
     public function view($movie_id = null) {
@@ -171,6 +199,16 @@ class MoviesController extends AppController {
     return $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$emb.'" frameborder="0" allowfullscreen></iframe> ';
 
 }
+
+    public function search() {
+        // 常に前回検索した値がフォームに残るように、dataに値を設定します
+        $this->request->data['Post'] = $this->request->query;
+
+        // Search pluginが提供するparseCriteriaメソッドを使います
+        $cond = $this->Post->parseCriteria($this->request->data['Post']);
+
+        $this->set('posts', $this->paginate('Post', $cond));
+    }
 
 }
 ?>

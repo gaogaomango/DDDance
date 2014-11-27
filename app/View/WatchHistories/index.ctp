@@ -1,6 +1,17 @@
 <!-- File: /app/View/Users/index.ctp -->
 <?php //debug($posts); ?>
 <h1>WatchHistory</h1>
+
+    <div>
+        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+        <fieldset>
+            <legend>検索</legend>
+        </fieldset>
+         <?php echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?>
+        <?php echo $this->Form->end('検索'); ?>
+    </div>
+
+
 <table>
     <tr>
         <th>Id</th>

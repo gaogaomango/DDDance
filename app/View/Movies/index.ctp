@@ -9,6 +9,31 @@
     }
     ?>
     </td>
+
+    <div>
+        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+        <fieldset>
+            <legend>検索</legend>
+        </fieldset>
+         <?php echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?>
+
+
+ <!-- 検索機能の&とorを手動で切り替える方法 -->
+<!--         <div class="control-group">
+        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
+            <div class="controls">
+                <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容')); ?>
+                <?php
+                    $options = array('and' => 'AND', 'or' => 'OR');
+                    $attributes = array('default' => 'and', 'class' => 'radio inline');
+                    echo $this->Form->radio('andor', $options, $attributes);
+                ?>
+            </div>
+        </div> -->
+
+        <?php echo $this->Form->end('検索'); ?>
+    </div>
+
 <table>
     <tr>
         <th>Id</th>
@@ -40,7 +65,6 @@
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
         <td><img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>"></td>
-    <!-- 仮 -->
         <td><?php echo $this->Html->link($movie['Movie']['movie_tag'], array('action' => 'view', $movie['Movie']['id'])); ?>    
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>

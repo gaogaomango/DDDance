@@ -107,7 +107,7 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-CakePlugin::load('DebugKit');
+CakePlugin::load(array('DebugKit','Search'));
 
 CakePlugin::load('Acl', array('bootstrap' => true));
 

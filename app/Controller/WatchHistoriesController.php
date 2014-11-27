@@ -2,9 +2,10 @@
 class WatchHistoriesController extends AppController {
     public $helpers = array('Html', 'Form');
 
-    public $components = array('Session');
+    public $components = array('Session','Search.Prg');
+    public $presetVars = true;
 
-    public $uses = array('WatchHistory','User','Genre');
+    public $uses = array('WatchHistory','User','Movie');
 
     public function index() {
     	$watchhistories = $this->WatchHistory->find('all');
@@ -12,11 +13,23 @@ class WatchHistoriesController extends AppController {
         // Categoryモデルを使ってデータを取得
         $users = $this->User->find('all');
 
-        $genres = $this->Genre->find('all');
+        $movies = $this->Movie->find('all');
 
-    	$this->set(compact('watchhistories', 'users', 'genres'));
+    	$this->set(compact('watchhistories', 'users', 'movies'));
 
         //$this->set('posts', $this->Post->find('all'));
+    
+        $this->Movie->recursive = 0;
+        $this->Prg->commonProcess();
+        $req = $this->passedArgs;
+
+        $this->paginate = array(
+            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+        );
+        $this->set('movies', $this->paginate());
+
+        $movie_names = $this->Movie->find('list');
+        $this->set(compact('movie_names'));
     }
 
     // public function category_index($category_id = null) {
@@ -60,32 +73,32 @@ class WatchHistoriesController extends AppController {
         }
     }
 
-public function edit($id = null) {
-        // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-        // $this->set('Genres', $Genres);
+// public function edit($id = null) {
+//         // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+//         // $this->set('Genres', $Genres);
         
-    if (!$id) {
-        throw new NotFoundException(__('Invalid watch_history'));
-    }
+//     if (!$id) {
+//         throw new NotFoundException(__('Invalid watch_history'));
+//     }
 
-    $watchhistory = $this->WatchHistory->findById($id);
-    if (!$watchhistory) {
-       throw new NotFoundException(__('Invalid watch_history'));
-    }
+//     $watchhistory = $this->WatchHistory->findById($id);
+//     if (!$watchhistory) {
+//        throw new NotFoundException(__('Invalid watch_history'));
+//     }
 
-    if ($this->request->is(array('watch_history', 'put'))) {
-        $this->WatchHistory->id = $id;
-        if ($this->WatchHistory->save($this->request->data)) {
-            $this->Session->setFlash(__('The Watch_History has been updated.'));
-            return $this->redirect(array('action' => 'index'));
-        }
-        $this->Session->setFlash(__('Unable to update the Watch_History.'));
-    }
+//     if ($this->request->is(array('watch_history', 'put'))) {
+//         $this->WatchHistory->id = $id;
+//         if ($this->WatchHistory->save($this->request->data)) {
+//             $this->Session->setFlash(__('The Watch_History has been updated.'));
+//             return $this->redirect(array('action' => 'index'));
+//         }
+//         $this->Session->setFlash(__('Unable to update the Watch_History.'));
+//     }
 
-    if (!$this->request->data) {
-        $this->request->data = $watchhistory;
-    }
-}
+//     if (!$this->request->data) {
+//         $this->request->data = $watchhistory;
+//     }
+// }
 
 public function delete($id) {
     if ($this->request->is('get')) {

@@ -2,7 +2,8 @@
 class FavaritesController extends AppController {
     public $helpers = array('Html', 'Form');
 
-    public $components = array('Session');
+    public $components = array('Session','Search.Prg');
+    public $presetVars = true;
 
     public $uses = array('Favarite','User','Movie');
 
@@ -17,6 +18,20 @@ class FavaritesController extends AppController {
     	$this->set(compact('favarites', 'users', 'movies'));
 
         //$this->set('posts', $this->Post->find('all'));
+
+        $this->Movie->recursive = 0;
+        $this->Prg->commonProcess();
+        $req = $this->passedArgs;
+
+        $this->paginate = array(
+            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+        );
+        $this->set('movies', $this->paginate());
+
+        $movie_names = $this->Movie->find('list');
+        $this->set(compact('movie_names'));
+
+
     }
 
     // public function category_index($category_id = null) {
