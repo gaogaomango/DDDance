@@ -34,11 +34,18 @@
         <?php echo $this->Form->end('検索'); ?>
     </div>
 
+     <?php
+         echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
+         echo $this->Paginator->numbers(array('separator' => ''));
+         echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
+    ?>
+
+
 <table>
     <tr>
-        <th>Id</th>
-        <th>User_ID</th>
-        <th>Genre_ID</th>
+        <th><?php echo $this->Paginator->sort('id','ID')?></th>
+        <th><?php echo $this->Paginator->sort('user_id','USER_ID')?></th>
+        <th><?php echo $this->Paginator->sort('genre_id','GENRE_ID')?></th>
         <th>Movie_Name</th>
         <th>Thumbnail</th>
         <th>Movie_tag</th>

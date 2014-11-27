@@ -2,8 +2,14 @@
 class MoviesController extends AppController {
     public $helpers = array('Html', 'Form');
 
-    public $components = array('Session','Search.Prg');
+    public $components = array('Session', 'Search.Prg', 'Paginator');
     public $presetVars = true;
+    public $paginate = array(
+        //1ページ表示できるデータ数の設定
+            'limit' =>7,
+        //データを降順に並べる
+            'Movie.play_count' => 'asc',
+            );
 
 // 検索機能の&とorを手動で切り替える方法 
     // array(
@@ -43,6 +49,7 @@ class MoviesController extends AppController {
 
         $this->paginate = array(
             'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+            'limit' =>7,
         );
         $this->set('movies', $this->paginate());
 
