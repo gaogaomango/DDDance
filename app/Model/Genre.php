@@ -8,6 +8,6 @@ class Genre extends AppModel {
             'rule' => 'notEmpty'
         )
     );
-    public $hasMany = 'Movie';
+    public $hasMany = array('Movie', 'Favarite');
 }
 ?>

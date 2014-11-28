@@ -5,17 +5,19 @@ class FavaritesController extends AppController {
     public $components = array('Session','Search.Prg');
     public $presetVars = true;
 
-    public $uses = array('Favarite','User','Movie');
+    public $uses = array('Favarite','User','Movie','Genre');
 
     public function index() {
     	$favarites = $this->Favarite->find('all');
 
-        // Categoryモデルを使ってデータを取得
+        // 別のモデルからデータを取得
         $users = $this->User->find('all');
 
         $movies = $this->Movie->find('all');
 
-    	$this->set(compact('favarites', 'users', 'movies'));
+        $genres = $this->Genre->find('all');
+
+    	$this->set(compact('favarites', 'users', 'movies', 'genres'));
 
         //$this->set('posts', $this->Post->find('all'));
 
@@ -59,7 +61,7 @@ class FavaritesController extends AppController {
         $this->set('favarite', $favarite);
     }
 
-   public function add($movie_id) {
+   public function add($movie_id, $genre_id) {
    //     $this->layout = 'changePractice';
         // $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
         // $this->set('Genres', $Genres);
@@ -74,6 +76,7 @@ class FavaritesController extends AppController {
 
             $this->request->data['Favarite']['movie_id'] = $movie_id;
             $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
+            $this->request->data['Favarite']['genre_id'] = $genre_id;
 
 
         if ($this->Favarite->save($this->request->data)) {

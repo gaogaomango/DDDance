@@ -112,6 +112,11 @@ public function login() {
 
 public function logout() {
         $this->Auth->logout();
+    if ($this->Auth->logout()) {
+                $this->redirect($this->Auth->redirect());
+            } else {
+                $this->Session->setFlash('You can not logout!!!!!!!');
+            }
     }
 
 }

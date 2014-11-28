@@ -6,3 +6,5 @@ echo $this->Form->inputs(array(
     'password'
 ));
 echo $this->Form->end('Login');
+
+echo $this->Html->link('ユーザー登録', array('action' => 'add'));

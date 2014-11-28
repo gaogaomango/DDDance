@@ -1,15 +1,14 @@
 <?php
 class MoviesController extends AppController {
-    public $helpers = array('Html', 'Form');
-
-    public $components = array('Session', 'Search.Prg', 'Paginator');
+    public $helpers = array('Html', 'Form', 'Paginator');
+    public $components = array('Session', 'Search.Prg');
     public $presetVars = true;
     public $paginate = array(
-        //1ページ表示できるデータ数の設定
             'limit' =>7,
-        //データを降順に並べる
-            'Movie.play_count' => 'asc',
-            );
+            'order'=>array(
+                'Movie.play_count' => 'desc'
+            )
+        );
 
 // 検索機能の&とorを手動で切り替える方法 
     // array(
@@ -20,6 +19,13 @@ class MoviesController extends AppController {
     // );
 
     public $uses = array('Movie','User','Genre', 'WatchHistory');
+
+    public function beforeFilter() {
+
+        parent ::beforeFilter();
+
+        $this->Auth->allow();
+    }
 
     public function index() {
     	$movies = $this->Movie->find('all');
@@ -39,7 +45,7 @@ class MoviesController extends AppController {
     
         $this->Movie->recursive = 0;
         $this->Prg->commonProcess();
-        $req = $this->passedArgs;
+        // $req = $this->passedArgs;
 
         // if (!empty($this->request->data['Movie']['keyword'])) {
         //     $andor = !empty($this->request->data['Movie']['andor']) ? $this->request->data['Movie']['andor'] : null;
@@ -47,11 +53,12 @@ class MoviesController extends AppController {
         //     $req = array_merge($req, array("word" => $word));
         // }
 
-        $this->paginate = array(
+        // $this->paginate = array(
+           $paginate = array(
             'conditions' => $this->Movie->parseCriteria($this->passedArgs),
-            'limit' =>7,
+            
         );
-        $this->set('movies', $this->paginate());
+         $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
         $this->set(compact('movie_names'));
@@ -61,7 +68,12 @@ class MoviesController extends AppController {
     public function view($movie_id = null) {
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
-       
+
+        $checkuser = $this->Auth->user('username');
+        $this->set('checkuser', $checkuser);
+
+//ユーザーがログインしていたら履歴に追加 
+        if($checkuser !== null){
         $WatchHistory['WatchHistory'] = array(
             'movie_id' => $movie_id,
             'user_id' => $this->Auth->user('id'),
@@ -69,31 +81,9 @@ class MoviesController extends AppController {
             );
 
         $this->WatchHistory->save($WatchHistory);
+        }
 
-
-// // 要変更箇所！！！！！！！！！！！！！！！！！！！！！！
-//         // 更新する内容を設定
-//         // $Play_counts = $this->Movie->find('all', array('fields' => array('id', 'play_count')));
-//         // $Play_counts = $Play_counts + 1;
-//         // $this->set('Play_counts', $Play_counts);
- 
-//         // 更新する項目（フィールド指定）
-//         // $fields = array('play_count');
-
-//         // 更新する内容を設定
-// //         $data = array('Movie' => array('id' => $movie_id, 'play_count' => ++1));
- 
-// // // 更新する項目（フィールド指定）
-// // $fields = array('play_count');
- 
-// // // 更新
-// // $this->Movie->save($data, false, $fields);
- 
-//         // 更新
-//         // if(isset($this->Movie->data['Movie']['play_count'])) {
-//         //     $num = (int)$this->Movie->data['Movie']['play_count'];
-//         //     $num++;
-//         // }
+// ムービーを見た回数を追加する機能
         $fields = array(
             'Play_count' => 'play_count+1' 
             );

@@ -1,6 +1,13 @@
-<!-- File: /app/View/Users/index.ctp -->
+<!-- File: /app/View/Favarites/index.ctp -->
 <?php //debug($posts); ?>
 <h1>Favarite</h1>
+ 
+    <td>
+        <?php 
+        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
+        ?>
+    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
+    </td>
 
     <div>
         <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
@@ -21,9 +28,6 @@
         <th>Created</th>
     </tr>
 
-    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
-
-
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
     <?php foreach ($favarites as $favarite): 
@@ -32,10 +36,10 @@
     ?>
     <tr>
         <td><?php echo $favarite['User']['id']; ?></td>
-        <td><?php echo $favarite['Movie']['genre_id'];?></td>
-        <td><?php echo $favarite['Movie']['movie_name'];?></td>
-　      <td><?php echo $this->Html->link($favarite['Movie']['movie_tag'], array('controller' => 'movies', 'action' => 'view', $favarite['Movie']['id'])); ?>
-         <td><?php echo $favarite['Movie']['movie_tag'];?></td>
+        <td><?php echo $favarite['Genre']['genre_title'];?></td>
+        <td><?php echo $this->Html->link($favarite['Movie']['movie_name'], array('controller' => 'movies', 'action' => 'view', $favarite['Movie']['id'])); ?>
+        </td>
+<!-- 　      <td><?php echo $this->Html->link($favarite['Movie']['movie_tag'], array('controller' => 'movies', 'action' => 'view', $favarite['Movie']['id'])); ?> -->
         <td><?php echo $favarite['Movie']['play_count'];?></td>
         <td><?php echo $favarite['Favarite']['created']; ?></td>
     　   <td>

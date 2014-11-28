@@ -1,6 +1,6 @@
-<!-- File: /app/View/Movies/edit.ctp -->
+<!-- File: /app/View/Favarites/edit.ctp -->
 
-<h1>Edit Movie</h1>
+<h1>Edit Favarite</h1>
 <?php
 echo $this->Form->create('Movie');
 echo $this->Form->input('movie_name');

@@ -9,6 +9,18 @@
     }
     ?>
     </td>
+    <td>
+        <?php 
+        if($checkuser == null){
+        echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
+        echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
+        }else{
+        echo 'ユーザーログイン';
+        echo 'ユーザー登録';
+        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
+        }?>
+    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
+    </td>
 
     <div>
         <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
@@ -46,19 +58,18 @@
         <th><?php echo $this->Paginator->sort('id','ID')?></th>
         <th><?php echo $this->Paginator->sort('user_id','USER_ID')?></th>
         <th><?php echo $this->Paginator->sort('genre_id','GENRE_ID')?></th>
-        <th>Movie_Name</th>
-        <th>Thumbnail</th>
-        <th>Movie_tag</th>
-        <th>discription</th>
-        <th>Play_count</th>
+        <th><?php echo $this->Paginator->sort('movie_name','MOVIE_NAME')?></th>
+        <th>THUMBNAIL</th>
+        <!-- <th><?php echo $this->Paginator->sort('movie_tag','MOVIE_TAG')?></th> -->
+        <th><?php echo $this->Paginator->sort('discription','DISCRIPTION')?></th>
+        <th><?php echo $this->Paginator->sort('play_count','PLAY_COUNT')?></th>
         <th>Action</th>
         <th>Action</th>
-        <th>Created</th>
-        <th>Modified</th>
+        <th><?php echo $this->Paginator->sort('created','CREATED')?></th>
+        <th><?php echo $this->Paginator->sort('modified','MODIDIED')?></th>
         <th>Good!!</th>
-        <th>Good_Number</th>
+        <th><?php echo $this->Paginator->sort('good','GOOD_NUMBER!!')?></th>
     </tr>
-<p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
@@ -71,8 +82,9 @@
         <td><?php echo $movie['User']['id']; ?></td>
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
+        </td>
         <td><img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>"></td>
-        <td><?php echo $this->Html->link($movie['Movie']['movie_tag'], array('action' => 'view', $movie['Movie']['id'])); ?>    
+        <!-- <td><?php echo $this->Html->link($movie['Movie']['movie_tag'], array('action' => 'view', $movie['Movie']['id'])); ?>     -->
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
 <!--         <td><?php if(isset($movie['Watch_history'])){
@@ -94,7 +106,7 @@
         <td><?php echo $movie['Movie']['modified']; ?></td>
         <td><?php 
             if($checkuser == 'adminuser'){
-                echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id']));
+                echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id'], $movie['Genre']['id']));
             }else{
                 echo 'add favarite';
         }

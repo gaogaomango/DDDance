@@ -4,8 +4,18 @@
 
 <p><small>Created: <?php echo $movie['Movie']['created']; ?></small></p>
 
-<p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
-
+    <td>
+        <?php 
+        if($checkuser == null){
+        echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
+        echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
+        }else{
+        echo 'ユーザーログイン';
+        echo 'ユーザー登録';
+        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
+        }?>
+    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
+    </td>
     <tr>
         <td><?php echo $movie['Movie']['id']; ?></td>
         <td><?php echo $movie['User']['id']; ?></td>
@@ -39,6 +49,14 @@
         </td>
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>
+        <td><?php 
+            if($checkuser == 'adminuser'){
+                echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id']));
+            }else{
+                echo 'add favarite';
+        }
+        ?>
+        </td>
         <td><?php 
             if($userSession['username'] == 'adminuser'){
                 echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));

@@ -9,7 +9,7 @@ class Movie extends AppModel {
             'field' => array('Movie.movie_name', 'Genre.genre_title', 'Movie.discription'),
         'connectorAnd' => '+', 'connectorOr' => ' '),
     );
-    
+
 // 検索機能の&とorを手動で切り替える方法
 //     public function multipleKeywords($keyword, $andor = null) {
 //         $connector = ($andor === 'or') ? ',' : '+';
@@ -29,7 +29,7 @@ class Movie extends AppModel {
     );
 
       public $belongsTo = array('Genre','User');
-      public $hasMany = array('Comment', 'Watch_history', 'Good');
+      public $hasMany = array('Comment', 'Watch_history', 'Good', 'Favarite');
     // public $hasMany = 'Favarite';
     // public $hasMany = 'Good';
 }

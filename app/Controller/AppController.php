@@ -48,7 +48,7 @@ class AppController extends Controller {
         
         //AuthComponentの設定
         $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-        $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+        $this->Auth->logoutRedirect = array('controller' => 'movies', 'action' => 'index');
         $this->Auth->loginRedirect = array('controller' => 'movies', 'action' => 'index');
         
         $this->set('userSession', $this->Auth->user());
