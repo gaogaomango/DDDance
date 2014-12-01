@@ -38,8 +38,8 @@
         <td><?php echo $watchhistory['Movie']['genre_id'];?></td>
         <td><?php echo $this->Html->link($watchhistory['Movie']['movie_name'], array('controller' => 'movies', 'action' => 'view', $watchhistory['Movie']['id'])); ?> 
         </td>
-        <td><img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($watchhistory['Movie']['id'], 5, "0", STR_PAD_LEFT);?>"></td>
-        <!-- <td><?php echo $watchhistory['Movie']['movie_tag'];?></td> -->
+        <td><?php echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($watchhistory['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('controller' => 'movies', 'action' => 'view', $watchhistory['Movie']['id']), array('escape' => false)); ?>
+        </td>
         <td><?php echo $watchhistory['Movie']['play_count'];?></td>
         <td><?php echo $watchhistory['WatchHistory']['created']; ?></td>
     </tr>

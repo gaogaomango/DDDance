@@ -136,6 +136,8 @@ class MoviesController extends AppController {
             } else {
             echo 'ファイルをアップロードできません。';
              }
+// indexに戻る処理
+             $this->redirect($this->Auth->redirect());
             } else {
             echo 'ファイルが選択されていません。';
             }

@@ -113,7 +113,10 @@ public function login() {
 public function logout() {
         $this->Auth->logout();
     if ($this->Auth->logout()) {
-                $this->redirect($this->Auth->redirect());
+                $this->redirect(
+// 前のページの情報を取得するPHP
+                    $_SERVER['HTTP_REFERER']);
+                    // $this->Auth->redirect());
             } else {
                 $this->Session->setFlash('You can not logout!!!!!!!');
             }

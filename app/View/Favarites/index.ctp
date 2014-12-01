@@ -39,6 +39,8 @@
         <td><?php echo $favarite['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($favarite['Movie']['movie_name'], array('controller' => 'movies', 'action' => 'view', $favarite['Movie']['id'])); ?>
         </td>
+        <td><?php echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($favarite['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $favarite['Movie']['id']), array('escape' => false)); ?>
+        </td>
 <!-- 　      <td><?php echo $this->Html->link($favarite['Movie']['movie_tag'], array('controller' => 'movies', 'action' => 'view', $favarite['Movie']['id'])); ?> -->
         <td><?php echo $favarite['Movie']['play_count'];?></td>
         <td><?php echo $favarite['Favarite']['created']; ?></td>

@@ -83,8 +83,8 @@
         <td><?php echo $movie['Genre']['genre_title'];?></td>
         <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'])); ?>
         </td>
-        <td><img src="http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>"></td>
-        <!-- <td><?php echo $this->Html->link($movie['Movie']['movie_tag'], array('action' => 'view', $movie['Movie']['id'])); ?>     -->
+        <td><?php echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $movie['Movie']['id']), array('escape' => false)); ?>
+        </td>
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
 <!--         <td><?php if(isset($movie['Watch_history'])){
