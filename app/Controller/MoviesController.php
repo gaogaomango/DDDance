@@ -18,7 +18,7 @@ class MoviesController extends AppController {
     //     'to' => array('type' => 'value', 'empty' => true, 'encode' => true),
     // );
 
-    public $uses = array('Movie','User','Genre', 'WatchHistory');
+    public $uses = array('Movie','User','Genre', 'WatchHistory', 'Comment');
 
     public function beforeFilter() {
 
@@ -35,7 +35,11 @@ class MoviesController extends AppController {
 
         $genres = $this->Genre->find('all');
 
-    	$this->set(compact('movies', 'users', 'genres'));
+        $watchhistories = $this->WatchHistory->find('all');
+
+        $comments = $this->Comment->find('all');
+
+    	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments'));
     
     // ユーザーネームの確認用変数 
         $checkuser = $this->Auth->user('username');
@@ -59,6 +63,51 @@ class MoviesController extends AppController {
             
         );
          $this->set('movies', $this->paginate('Movie'));
+
+        $movie_names = $this->Movie->find('list');
+        $this->set(compact('movie_names'));
+
+    }
+// うまくいかなーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーい！！！！！！！
+    public function genre_index($genre_id = null){
+        $movies = $this->Movie->find('all', array('conditions' => array('genre_id' =>$genre_id)));
+
+        // Categoryモデルを使ってデータを取得
+        $users = $this->User->find('all');
+
+        $selectedGenre = $this->Genre->find('all', array('conditions' => array('id' => $genre_id)));
+
+        $genres = $this->Genre->find('all');
+
+        $watchhistories = $this->WatchHistory->find('all');
+
+        $comments = $this->Comment->find('all');
+
+        $this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments', 'selectedGenre'));
+    
+    // ユーザーネームの確認用変数 
+        $checkuser = $this->Auth->user('username');
+        $this->set('checkuser', $checkuser);
+
+        //$this->set('posts', $this->Post->find('all'));
+    
+        $this->Movie->recursive = 0;
+        $this->Prg->commonProcess();
+
+        // $req = $this->passedArgs;
+
+        // if (!empty($this->request->data['Movie']['keyword'])) {
+        //     $andor = !empty($this->request->data['Movie']['andor']) ? $this->request->data['Movie']['andor'] : null;
+        //     $word = $this->Movie->multipleKeywords($this->request->data['Movie']['keyword'], $andor);
+        //     $req = array_merge($req, array("word" => $word));
+        // }
+
+        // $this->paginate = array(
+
+        $paginate = array(
+            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+        );
+        $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
         $this->set(compact('movie_names'));

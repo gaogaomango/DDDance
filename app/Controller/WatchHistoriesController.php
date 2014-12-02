@@ -1,36 +1,48 @@
 <?php
 class WatchHistoriesController extends AppController {
     public $helpers = array('Html', 'Form');
-
     public $components = array('Session','Search.Prg');
     public $presetVars = true;
-
+// ページネート機能
+    // public $paginate = array(
+    //         'limit' =>7,
+    //         'order'=>array(
+    //             'Movie.play_count' => 'desc'
+    //         )
+    //     );
     public $uses = array('WatchHistory','User','Movie');
 
     public function index() {
-    	$watchhistories = $this->WatchHistory->find('all');
+    	// $watchhistories = $this->WatchHistory->find('all');
 
-        // Categoryモデルを使ってデータを取得
+        $watchhistories = $this->WatchHistory->find('all', array(
+            'order' => array('WatchHistory.created' => 'desc'), 'limit' => 7
+        ));
+
         $users = $this->User->find('all');
 
         $movies = $this->Movie->find('all');
 
     	$this->set(compact('watchhistories', 'users', 'movies'));
 
-        //$this->set('posts', $this->Post->find('all'));
-    
-        $this->Movie->recursive = 0;
-        $this->Prg->commonProcess();
-        $req = $this->passedArgs;
+        
 
-        $this->paginate = array(
-            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
-        );
-        $this->set('movies', $this->paginate());
+//ページネート機能 
+        // $this->WatchHistory->recursive = 0;
+        // $this->Prg->commonProcess();
+        // $req = $this->passedArgs;
 
-        $movie_names = $this->Movie->find('list');
-        $this->set(compact('movie_names'));
+        // // $this->
+        // $paginate = array(
+        //     'conditions' => $this->WatchHistory->parseCriteria($this->passedArgs),
+        // );
+        // $this->set('watchhistories', $this->paginate('WatchHistory'));
+
+        // $watchhistories = $this->WatchHistory->find('list');
+        // $this->set(compact('watchhistories'));
     }
+
+
 
     // public function category_index($category_id = null) {
     //     $posts = $this->Post->find('all',array('conditions' => array('category_id' => $category_id)));

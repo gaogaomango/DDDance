@@ -10,6 +10,8 @@
             echo 'Add Movie';
     }
     ?>
+    <p><?php echo $this->Html->link('一覧に戻る',array('action' => 'index'));?></p>
+    ?>
     </td>
     <td>
         <?php 
@@ -32,7 +34,7 @@
          <?php echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?>
 
 
- <!-- 検索機能の&とorを手動で切り替える方法 -->
+<!-- 検索機能の&とorを手動で切り替える方法 -->
 <!--         <div class="control-group">
         <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
             <div class="controls">
@@ -102,8 +104,7 @@
             <?php echo $this->Html->link('Edit', array('action' => 'edit', $movie['Movie']['id'])); ?>
         </td>
         <td>
-            <?php echo $this->Form->postlink('Delete', array('action' => 'delete', $movie['Movie']['id']),
-                array('confirm' => 'Are you sure????????')); ?>
+            <?php echo $this->Form->postlink('Delete', array('action' => 'delete', $movie['Movie']['id'])); ?>
         </td>
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>

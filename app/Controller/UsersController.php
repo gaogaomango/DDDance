@@ -121,19 +121,15 @@ $pos2 = strpos($mystring, $findme2);
 // === を使用していることに注目しましょう。単純に == を使ったのでは
 // 期待通りに動作しません。なぜなら 'a' が 0 番目 (最初) の文字だからです。
     if ($this->Auth->logout()) {
-    
     if (($pos1 === false)&&($pos2 === false)) {
          $this->redirect($this->Auth->redirect());    
-                
         } else {
-  
                 $this->redirect(
 // 前のページの情報を取得するPHP
               $_SERVER['HTTP_REFERER']);
          }
         }
      }
-    
 
 }
 ?>
