@@ -11,7 +11,6 @@
     }
     ?>
     <p><?php echo $this->Html->link('一覧に戻る',array('action' => 'index'));?></p>
-    ?>
     </td>
     <td>
         <?php 

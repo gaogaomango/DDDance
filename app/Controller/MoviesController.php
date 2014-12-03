@@ -70,7 +70,7 @@ class MoviesController extends AppController {
     }
 // うまくいかなーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーい！！！！！！！
     public function genre_index($genre_id = null){
-        $movies = $this->Movie->find('all', array('conditions' => array('genre_id' =>$genre_id)));
+        // $movies = $this->Movie->find('all', array('conditions' => array('genre_id' =>$genre_id)));
 
         // Categoryモデルを使ってデータを取得
         $users = $this->User->find('all');
@@ -105,8 +105,9 @@ class MoviesController extends AppController {
         // $this->paginate = array(
 
         $paginate = array(
-            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
+            'conditions' => array('genre_id' => $genre_id)
         );
+        debug(array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)));
         $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
@@ -115,6 +116,11 @@ class MoviesController extends AppController {
     }
 
     public function view($movie_id = null) {
+        
+        $comments = $this->Comment->find('all', array('condition' =>array('movie_id' => 'id')));
+
+        $this->set(compact('movies', 'comments'));
+
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
 
