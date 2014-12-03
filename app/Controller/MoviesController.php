@@ -58,7 +58,8 @@ class MoviesController extends AppController {
         // }
 
         // $this->paginate = array(
-           $paginate = array(
+        $this->paginate = array(           
+           // $paginate = array(
             'conditions' => $this->Movie->parseCriteria($this->passedArgs),
             
         );
@@ -102,12 +103,12 @@ class MoviesController extends AppController {
         //     $req = array_merge($req, array("word" => $word));
         // }
 
-        // $this->paginate = array(
-
-        $paginate = array(
-            'conditions' => array('genre_id' => $genre_id)
+// 原因がここだったみたい！！！！！！！！！！ただちょっとこの文の意味があまり分かってない！！！！！
+        $this->paginate = array(
+           'conditions' => array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id))
+            // array('genre_id' => $genre_id)
         );
-        debug(array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)));
+        // debug(array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)));
         $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
