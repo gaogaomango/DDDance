@@ -10,7 +10,7 @@ class WatchHistoriesController extends AppController {
     //             'Movie.play_count' => 'desc'
     //         )
     //     );
-    public $uses = array('WatchHistory','User','Movie');
+    public $uses = array('WatchHistory', 'User', 'Movie', 'Genre');
 
     public function index() {
     	// $watchhistories = $this->WatchHistory->find('all');
@@ -23,7 +23,9 @@ class WatchHistoriesController extends AppController {
 
         $movies = $this->Movie->find('all');
 
-    	$this->set(compact('watchhistories', 'users', 'movies'));
+        $genres = $this->Genre->find('all');
+
+    	$this->set(compact('watchhistories', 'users', 'movies', 'genres'));
 
         
 

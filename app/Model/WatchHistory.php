@@ -18,7 +18,7 @@ class WatchHistory extends AppModel {
         )
     );
 
-    public $belongsTo = array('Movie','User');
+    public $belongsTo = array('Movie', 'User', 'Genre');
     // public $hasMany = 'Comment';
     // public $hasMany = 'Favarite';
     // public $hasMany = 'Good';

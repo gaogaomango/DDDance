@@ -3,8 +3,9 @@ class MoviesController extends AppController {
     public $helpers = array('Html', 'Form', 'Paginator');
     public $components = array('Session', 'Search.Prg');
     public $presetVars = true;
+    // index内を$this->paginateにしたら有効じゃない？？？？？？？？？？？
     public $paginate = array(
-            'limit' =>7,
+            'limit' =>4,
             'order'=>array(
                 'Movie.play_count' => 'desc'
             )
@@ -35,7 +36,19 @@ class MoviesController extends AppController {
 
         $genres = $this->Genre->find('all');
 
-        $watchhistories = $this->WatchHistory->find('all');
+        $watchhistories = $this->WatchHistory->find('all',
+            // なんでarrayの中にWatchhistory.user_id????????????????！！！！！！！！！！
+
+            //！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
+            'order' => array('WatchHistory.created' => 'DESC'),
+            'limit' => 7
+            )
+            );
+        // debug(array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
+        //     'order' => array('WatchHistory.created' => 'DESC'),
+        //     'limit' => 7
+        //     ));
 
         $comments = $this->Comment->find('all');
 
@@ -61,7 +74,10 @@ class MoviesController extends AppController {
         $this->paginate = array(           
            // $paginate = array(
             'conditions' => $this->Movie->parseCriteria($this->passedArgs),
-            
+            'limit' =>7,
+            'order'=>array(
+                'Movie.play_count' => 'desc'
+            )
         );
          $this->set('movies', $this->paginate('Movie'));
 
@@ -69,7 +85,7 @@ class MoviesController extends AppController {
         $this->set(compact('movie_names'));
 
     }
-// うまくいかなーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーい！！！！！！！
+
     public function genre_index($genre_id = null){
         // $movies = $this->Movie->find('all', array('conditions' => array('genre_id' =>$genre_id)));
 
@@ -80,7 +96,12 @@ class MoviesController extends AppController {
 
         $genres = $this->Genre->find('all');
 
-        $watchhistories = $this->WatchHistory->find('all');
+        $watchhistories = $this->WatchHistory->find('all',
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
+            'order' => array('WatchHistory.created' => 'DESC'),
+            'limit' => 7
+            )
+            );
 
         $comments = $this->Comment->find('all');
 
@@ -105,7 +126,8 @@ class MoviesController extends AppController {
 
 // 原因がここだったみたい！！！！！！！！！！ただちょっとこの文の意味があまり分かってない！！！！！
         $this->paginate = array(
-           'conditions' => array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id))
+           'conditions' => array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)),
+            'limit' => 7
             // array('genre_id' => $genre_id)
         );
         // debug(array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)));
@@ -116,10 +138,17 @@ class MoviesController extends AppController {
 
     }
 
-    public function view($movie_id = null) {
-        
-        $comments = $this->Comment->find('all', array('condition' =>array('movie_id' => 'id')));
+    public function view($movie_id, $genre_id) {
 
+        $checkuser = $this->Auth->user('username');
+        $this->set('checkuser', $checkuser);
+        
+        $comments = $this->Comment->find('all',
+            array('conditions' => array('Comment.movie_id' => $movie_id), 
+            'order' => array('Comment.created' => 'DESC'),
+            // 'limit' => 7
+            )
+            );
         $this->set(compact('movies', 'comments'));
 
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
@@ -133,8 +162,17 @@ class MoviesController extends AppController {
         $WatchHistory['WatchHistory'] = array(
             'movie_id' => $movie_id,
             'user_id' => $this->Auth->user('id'),
-            'created' => null
+            'created' => null,
+            'genre_id' => $genre_id
             );
+
+    debug(array(
+            'movie_id' => $movie_id,
+            'user_id' => $this->Auth->user('id'),
+            'created' => null,
+            'genre_id' => $genre_id
+            ));
+
 
         $this->WatchHistory->save($WatchHistory);
         }

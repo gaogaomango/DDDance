@@ -17,6 +17,30 @@
         }?>
     <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
     </td>
+    <!-- 検索機能 -->
+    <div>
+        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+        <fieldset>
+            <legend>検索</legend>
+        </fieldset>
+         <?php echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?>
+
+
+ <!-- 検索機能の&とorを手動で切り替える方法 -->
+<!--         <div class="control-group">
+        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
+            <div class="controls">
+                <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容')); ?>
+                <?php
+                    $options = array('and' => 'AND', 'or' => 'OR');
+                    $attributes = array('default' => 'and', 'class' => 'radio inline');
+                    echo $this->Form->radio('andor', $options, $attributes);
+                ?>
+            </div>
+        </div> -->
+
+        <?php echo $this->Form->end('検索'); ?>
+    </div>
     <tr>
         <td><?php echo $movie['Movie']['id']; ?></td>
         <td><?php echo $movie['User']['id']; ?></td>
@@ -80,7 +104,7 @@
 <!-- comment index -->
 <div>
 <h1>Movie Comments</h1>
-<p><?php echo $this->Html->link("Add Comments", array('action' => 'add')); ?></p>
+<p><?php echo $this->Html->link("Add Comments", array('controller' => 'comments', 'action' => 'add')); ?></p>
 <table>
     <tr>
         <th>user_name</th>
@@ -99,6 +123,7 @@
 
     ?>
     <tr>
+
         <td><?php echo $comment['User']['username']; ?></td>
         <td><?php echo $comment['Movie']['movie_name']; ?></td>
         <td><?php echo $comment['Comment']['comment'];?></td>
