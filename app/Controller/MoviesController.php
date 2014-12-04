@@ -3,9 +3,8 @@ class MoviesController extends AppController {
     public $helpers = array('Html', 'Form', 'Paginator');
     public $components = array('Session', 'Search.Prg');
     public $presetVars = true;
-    // index内を$this->paginateにしたら有効じゃない？？？？？？？？？？？
     public $paginate = array(
-            'limit' =>4,
+            'limit' =>7,
             'order'=>array(
                 'Movie.play_count' => 'desc'
             )
@@ -19,7 +18,7 @@ class MoviesController extends AppController {
     //     'to' => array('type' => 'value', 'empty' => true, 'encode' => true),
     // );
 
-    public $uses = array('Movie','User','Genre', 'WatchHistory', 'Comment');
+    public $uses = array('Movie', 'User', 'Genre', 'WatchHistory', 'Comment');
 
     public function beforeFilter() {
 
@@ -36,10 +35,9 @@ class MoviesController extends AppController {
 
         $genres = $this->Genre->find('all');
 
+// recursiveはアソシエーションの感想設定　-1は自分、0は一つ先まで
+        // $this->WatchHistory->recursive = -1;
         $watchhistories = $this->WatchHistory->find('all',
-            // なんでarrayの中にWatchhistory.user_id????????????????！！！！！！！！！！
-
-            //！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
             array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
             'order' => array('WatchHistory.created' => 'DESC'),
             'limit' => 7
@@ -70,15 +68,13 @@ class MoviesController extends AppController {
         //     $req = array_merge($req, array("word" => $word));
         // }
 
-        // $this->paginate = array(
-        $this->paginate = array(           
-           // $paginate = array(
-            'conditions' => $this->Movie->parseCriteria($this->passedArgs),
-            'limit' =>7,
-            'order'=>array(
-                'Movie.play_count' => 'desc'
-            )
-        );
+        // 以前まではpaginateに上書きしてたからうまく行かなかった！
+          $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs)
+            // 'limit' =>7,
+            // 'order'=>array(
+            //     'Movie.play_count' => 'desc'
+            // )
+        ;
          $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
@@ -124,11 +120,12 @@ class MoviesController extends AppController {
         //     $req = array_merge($req, array("word" => $word));
         // }
 
-// 原因がここだったみたい！！！！！！！！！！ただちょっとこの文の意味があまり分かってない！！！！！
         $this->paginate = array(
            'conditions' => array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)),
-            'limit' => 7
-            // array('genre_id' => $genre_id)
+            'limit' => 7,
+            'order'=>array(
+                'Movie.created' => 'desc'
+            )
         );
         // debug(array_merge($this->Movie->parseCriteria($this->passedArgs), array('genre_id' => $genre_id)));
         $this->set('movies', $this->paginate('Movie'));
@@ -149,7 +146,15 @@ class MoviesController extends AppController {
             // 'limit' => 7
             )
             );
-        $this->set(compact('movies', 'comments'));
+
+        $watchhistories = $this->WatchHistory->find('all',
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
+            'order' => array('WatchHistory.created' => 'DESC'),
+            'limit' => 7
+            )
+            );
+
+        $this->set(compact('movies', 'comments', 'watchhistories', 'movie_id'));
 
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
@@ -202,8 +207,8 @@ class MoviesController extends AppController {
 
    public function add() {
    //     $this->layout = 'changePractice';
-        $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-        $this->set('Genres', $Genres);
+        $genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+        $this->set('genres', $genres);
 
         if ($this->request->is('post')) {
             $this->Movie->create();
@@ -241,8 +246,8 @@ class MoviesController extends AppController {
     }
 
     public function edit($id = null) {
-            $Genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
-            $this->set('Genres', $Genres);
+            $genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
+            $this->set('genres', $genres);
 
         if (!$id) {
             throw new NotFoundException(__('Invalid movie'));

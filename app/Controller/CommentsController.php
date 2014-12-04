@@ -7,8 +7,11 @@ class CommentsController extends AppController {
     public $uses = array('Comment','User','Movie');
 
     function beforeFilter() {
+    
     parent::beforeFilter();
-    // $this->Auth->allow();
+    
+    $this->Auth->allow();
+
     }
 
     public function index() {
@@ -49,25 +52,38 @@ class CommentsController extends AppController {
     //     $this->set('user', $user);
     // }
 
-   public function add() {
+   public function add($movie_id) {
    //     $this->layout = 'changePractice';
-        $Comments = $this->Comment->find('list');
-        $this->set('Comments', $Comments);
+        $comments = $this->Comment->find('list');
+        $movies = $this->Movie->find('all');
+        $users = $this->User->find('all');
+
+        $this->set(compact('movies', 'movie_id', 'users'));
+        $this->set('comments', $comments);
+
+        $check_id = $this->Auth->user('id');
+        $this->set('check_id', $check_id);
 
         if ($this->request->is('post')) {
             $this->Comment->create();
             debug($this->request->data);
             if ($this->Comment->save($this->request->data)) {
                 $this->Session->setFlash(__('The Comment has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('controller' => 'movies', 'action' => 'view'));
             }
+            !!!!!!!!!!!!!!!!!!!!!!!!!元のムービのページに戻りターーーーーーーーい
             $this->Session->setFlash(__('Unable to add the Comment.'));
         }
     }
 
-public function edit($id = null) {
-        $Comments = $this->Comment->find('list');
-        $this->set('Comments', $Comments);
+public function edit($id, $movie_id) {
+        $comments = $this->Comment->find('list');
+        $movies = $this->Movie->find('all');
+        $users = $this->User->find('all');
+
+        $this->set(compact('movies', 'movie_id'));
+        
+        $this->set('comments', $comments);
     if (!$id) {
         throw new NotFoundException(__('Invalid comment'));
     }
