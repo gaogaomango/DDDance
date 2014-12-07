@@ -7,6 +7,7 @@
 <div>
     <td>
         <?php 
+        echo $this->Html->link("トップページへ", array('action' => 'index'));
         if($checkuser == null){
         echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
         echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
@@ -75,7 +76,7 @@
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>
         <td><?php 
-            if($checkuser == 'adminuser'){
+            if($userSession['username'] !== null){
                 echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id']));
             }else{
                 echo 'add favarite';
@@ -105,11 +106,12 @@
 <div>
 <h1>Movie Comments</h1>
 <p><?php 
-    if($checkuser == null){
+    if($userSession['username'] == null){
         echo 'Add Comments（ユーザー登録後使えます）';
     }else{
-    echo $this->Html->link("Add Comments", array('controller' => 'comments', 'action' => 'add', $movie_id));
-    } ?></p>
+    echo $this->Html->link("Add Comments", array('controller' => 'comments', 'action' => 'add', $movie_id, $genre_id));
+    } 
+    ?></p>
 <table>
     <tr>
         <th>user_name</th>
@@ -148,7 +150,7 @@
 
 <!-- watch_history index -->
 <?php 
-if($checkuser !== null){
+if($userSession['username'] !== null){
     ?>
 <div>
 <h1>WatchHistory</h1>

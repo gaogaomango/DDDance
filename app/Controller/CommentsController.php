@@ -52,60 +52,57 @@ class CommentsController extends AppController {
     //     $this->set('user', $user);
     // }
 
-   public function add($movie_id) {
+   public function add($movie_id, $genre_id) {
    //     $this->layout = 'changePractice';
         $comments = $this->Comment->find('list');
         $movies = $this->Movie->find('all');
-        $users = $this->User->find('all');
+        // $users = $this->User->find('all');
 
-        $this->set(compact('movies', 'movie_id', 'users'));
+        $this->set(compact('movies', 'movie_id', 'genre_id'));
         $this->set('comments', $comments);
 
-        $check_id = $this->Auth->user('id');
-        $this->set('check_id', $check_id);
-
-        if ($this->request->is('post')) {
+            if ($this->request->is('post')) {
             $this->Comment->create();
             debug($this->request->data);
             if ($this->Comment->save($this->request->data)) {
                 $this->Session->setFlash(__('The Comment has been saved.'));
-                return $this->redirect(array('controller' => 'movies', 'action' => 'view'));
+                return $this->redirect(array('controller' => 'movies', 'action' => 'view', $movie_id, $genre_id));
             }
-            !!!!!!!!!!!!!!!!!!!!!!!!!元のムービのページに戻りターーーーーーーーい
+            // !!!!!!!!!!!!!!!!!!!!!!!!!元のムービのページに戻りターーーーーーーーい
             $this->Session->setFlash(__('Unable to add the Comment.'));
         }
     }
 
-public function edit($id, $movie_id) {
-        $comments = $this->Comment->find('list');
-        $movies = $this->Movie->find('all');
-        $users = $this->User->find('all');
+// public function edit($id, $movie_id, $genre_id) {
+//         $comments = $this->Comment->find('list');
+//         $movies = $this->Movie->find('all');
+//         $users = $this->User->find('all');
 
-        $this->set(compact('movies', 'movie_id'));
+//         $this->set(compact('movies', 'movie_id'));
         
-        $this->set('comments', $comments);
-    if (!$id) {
-        throw new NotFoundException(__('Invalid comment'));
-    }
+//         $this->set('comments', $comments);
+//     if (!$id) {
+//         throw new NotFoundException(__('Invalid comment'));
+//     }
 
-    $comment = $this->Comment->findById($id);
-    if (!$user) {
-        throw new NotFoundException(__('Invalid comment'));
-    }
+//     $comment = $this->Comment->findById($id);
+//     if (!$user) {
+//         throw new NotFoundException(__('Invalid comment'));
+//     }
 
-    if ($this->request->is(array('comment', 'put'))) {
-        $this->Comment->id = $id;
-        if ($this->Comment->save($this->request->data)) {
-            $this->Session->setFlash(__('The Comment has been updated.'));
-            return $this->redirect(array('action' => 'index'));
-        }
-        $this->Session->setFlash(__('Unable to update the Comment.'));
-    }
+//     if ($this->request->is(array('comment', 'put'))) {
+//         $this->Comment->id = $id;
+//         if ($this->Comment->save($this->request->data)) {
+//             $this->Session->setFlash(__('The Comment has been updated.'));
+//             return $this->redirect(array('controller' =>'Movie', 'action' => 'view', $movie_id, $genre_id));
+//         }
+//         $this->Session->setFlash(__('Unable to update the Comment.'));
+//     }
 
-    if (!$this->request->data) {
-        $this->request->data = $comment;
-    }
-}
+//     if (!$this->request->data) {
+//         $this->request->data = $comment;
+//     }
+// }
 
 public function delete($id) {
     if ($this->request->is('get')) {

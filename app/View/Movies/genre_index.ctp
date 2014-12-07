@@ -3,13 +3,17 @@
 <!-- movie index -->
 <div>
 <h1>Movie</h1>
-    <td><?php 
-        if($checkuser == 'adminuser'){
-            echo $this->Html->link('Add Movie', array('action' => 'add'));
+    <td>        
+        <?php 
+        echo $this->Html->link("トップページへ", array('action' => 'index'));
+        if($checkuser == null){
+        echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
+        echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
         }else{
-            echo 'Add Movie';
-    }
-    ?>
+        echo 'ユーザーログイン';
+        echo 'ユーザー登録';
+        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
+        }?>
     <p><?php echo $this->Html->link('一覧に戻る',array('action' => 'index'));?></p>
     </td>
     <td>
@@ -180,7 +184,7 @@
 
 <!-- watch_history index -->
 <?php 
-if($checkuser == 'adminuser'){
+if($userSession['username'] !== null){
     ?>
 <div>
 <h1>WatchHistory</h1>

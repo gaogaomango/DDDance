@@ -4,7 +4,7 @@
 <div>
 <h1>Movie</h1>
     <td><?php 
-        if($checkuser == 'adminuser'){
+        if($userSession['username'] !== null){
             echo $this->Html->link('Add Movie', array('action' => 'add'));
         }else{
             echo 'Add Movie';
@@ -13,7 +13,7 @@
     </td>
     <td>
         <?php 
-        if($checkuser == null){
+        if($userSession['username'] == null){
         echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
         echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
         }else{
@@ -108,7 +108,7 @@
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>
         <td><?php 
-            if($checkuser == 'adminuser'){
+            if($userSession['username'] !== null){
                 echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id'], $movie['Genre']['id']));
             }else{
                 echo 'add favarite';
@@ -118,7 +118,7 @@
         <td><?php echo $this->Html->link('look favarite lists' , array('controller' => 'favarites', 'action' => 'index')); ?>
         </td>
         <td><?php 
-            if($checkuser == 'adminuser'){
+            if($userSession['username'] !== null){
                 echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
             }else{
                 echo 'Good!!';
@@ -180,7 +180,7 @@
 
 <!-- watch_history index -->
 <?php 
-if($checkuser !== null){
+if($userSession['username'] !== null){
     ?>
 <div>
 <h1>WatchHistory</h1>

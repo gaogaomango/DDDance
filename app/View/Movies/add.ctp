@@ -2,6 +2,8 @@
 
 <h1>Add Movie</h1>
 <?php
+echo $this->Html->link("トップページへ", array('action' => 'index'));
+        
 echo $this->Form->create('Movie',array('enctype' => 'multipart/form-data'));
 echo $this->Form->input('movie_name');
 // ここにムービータグを付ける

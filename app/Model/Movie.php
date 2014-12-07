@@ -20,12 +20,38 @@ class Movie extends AppModel {
 
 
     public $validate = array(
-        'title' => array(
-            'rule' => 'notEmpty'
-        ),
-        'body' => array(
-            'rule' => 'notEmpty'
-        )
+            'movie_name' =>
+            
+             array('rule' => 'notEmpty',
+
+            'message' => '動画の名前を入力してください'
+            ),
+// 数字以外の時にエラーを吐くコード
+            // 'numeric' =>
+
+            // array('rule' => 'numeric',
+
+            // 'message' => '動画の入力が不正です',
+
+            // 'allowEmpty' => true,
+
+            // )
+            
+// バリデーションがーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー！
+        // 'movie_tag'　=> 
+
+        //      array('rule' => 'notEmpty',
+
+        //     'message' => '動画のurlを入力してください'
+        //     ),
+        // 'upfile'　=> array('rule' => 'notEmpty',
+
+        //     'message' => 'サムネイルを選択してください'
+        //     ),
+        // 'discription'　=> array('rule' => 'notEmpty',
+
+        //     'message' => '動画の説明を入力してください'
+        //     )
     );
 
       public $belongsTo = array('Genre','User');

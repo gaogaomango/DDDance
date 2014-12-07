@@ -41,6 +41,12 @@ class MoviesController extends AppController {
             array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
             'order' => array('WatchHistory.created' => 'DESC'),
             'limit' => 7
+            ,
+
+            
+            // 重複が消せないよーーーーーーーーーーーーーーーーーーーーーー！！！！！
+            // ！！！！！！！！！！！！！！！！！！！！！！！！！
+            'fields' => array('DISTINCT *', 'Movie.*', 'User.*')
             )
             );
         // debug(array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
@@ -53,8 +59,8 @@ class MoviesController extends AppController {
     	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments'));
     
     // ユーザーネームの確認用変数 
-        $checkuser = $this->Auth->user('username');
-        $this->set('checkuser', $checkuser);
+        // $checkuser = $this->Auth->user('username');
+        // $this->set('checkuser', $checkuser);
 
         //$this->set('posts', $this->Post->find('all'));
     
@@ -154,13 +160,13 @@ class MoviesController extends AppController {
             )
             );
 
-        $this->set(compact('movies', 'comments', 'watchhistories', 'movie_id'));
+        $this->set(compact('movies', 'comments', 'watchhistories', 'movie_id', 'genre_id'));
 
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
 
-        $checkuser = $this->Auth->user('username');
-        $this->set('checkuser', $checkuser);
+        // $checkuser = $this->Auth->user('username');
+        // $this->set('checkuser', $checkuser);
 
 //ユーザーがログインしていたら履歴に追加 
         if($checkuser !== null){
