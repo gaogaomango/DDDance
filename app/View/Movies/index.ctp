@@ -207,8 +207,6 @@ if($userSession['username'] !== null){
     <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
 
 
-    <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
-
     <?php
 
     foreach ($watchhistories as $watchhistory):  

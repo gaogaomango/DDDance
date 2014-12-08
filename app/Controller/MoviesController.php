@@ -37,16 +37,38 @@ class MoviesController extends AppController {
 
 // recursiveはアソシエーションの感想設定　-1は自分、0は一つ先まで
         // $this->WatchHistory->recursive = -1;
-        $watchhistories = $this->WatchHistory->find('all',
-            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
-            'order' => array('WatchHistory.created' => 'DESC'),
-            'limit' => 7
-            ,
+        // $this->WatchHistory->virtualFields['id'] = 0;
+        $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
+             from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7'
+             );
 
+        debug(array($watchhistories_id));
+        // debug(array($watch_id));
+ // 直接SQL文を書かないやり方
+        $watchhistories = $this->WatchHistory->find('all',
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'),
+                'WatchHistory.id' =>
+
+                // foreach($watchhistories_id as $watch_id):
+
+
+                // array($watch_id[0]['max(id)'])
+                array($watchhistories_id[0][0]['max(id)'])
+                // endforeach;
+
+
+                ),
+            'group' => array('WatchHistory.movie_id'),    
+            // 'order' => array('WatchHistory.id' => 'DESC'),
+            // 'limit' => 7
             
-            // 重複が消せないよーーーーーーーーーーーーーーーーーーーーーー！！！！！
+
+        // $watchhistories = $this->WatchHistory->query('select max(id), movie_id 
+        //     from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7');
+
+             // 重複が消せないよーーーーーーーーーーーーーーーーーーーーーー！！！！！
             // ！！！！！！！！！！！！！！！！！！！！！！！！！
-            'fields' => array('DISTINCT *', 'Movie.*', 'User.*')
+             // 'fields' => max(array('WatchHistory.id'))
             )
             );
         // debug(array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
