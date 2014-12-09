@@ -39,12 +39,15 @@ class MoviesController extends AppController {
         // $this->WatchHistory->recursive = -1;
         // $this->WatchHistory->virtualFields[] = 0;
 
+        // コントローラーの中ではグローバル変数使えないので新たに定義
+        $userSession = $this->Auth->user();
     // max(id)がうまく書けないので直接SQL文を書く
+        if($userSession !== null){
         $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
              from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7'
              );
 
-        debug(array($watchhistories_id));
+        // debug(array($watchhistories_id));
         // debug(array($watch_id));
  // 直接SQL文を書かないやり方
              $watchidid = array();
@@ -69,6 +72,8 @@ class MoviesController extends AppController {
 
             )
             );
+
+        }
         $comments = $this->Comment->find('all');
 
     	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments'));
@@ -107,12 +112,47 @@ class MoviesController extends AppController {
 
         $genres = $this->Genre->find('all');
 
+        $userSession = $this->Auth->user();
+    // max(id)がうまく書けないので直接SQL文を書く
+        if($userSession !== null){
+        $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
+            from watch_histories where (user_id ='.$this->Auth->user('id').') and (genre_id='.$genre_id.') 
+            group by movie_id order by max(id) DESC limit 7'
+                         );
+
+        debug(array($watchhistories_id));
+        // debug(array($watch_id));
+ // 直接SQL文を書かないやり方
+             $watchidid = array();
+                foreach ($watchhistories_id as $watchid):
+                // $watch_id = $watch_id['max(id)'];
+                $watchidid[] = $watchid[0]['max(id)'];
+                endforeach;
+                // debug($watchidid);
+                // debug($watchid[0]['max(id)']);
+
         $watchhistories = $this->WatchHistory->find('all',
-            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
-            'order' => array('WatchHistory.created' => 'DESC'),
-            'limit' => 7
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'),
+                'WatchHistory.id' => $watchidid
+                ),
+            'group' => array('WatchHistory.movie_id'),    
+            // 'order' => array('WatchHistory.id' => 'DESC'),
+            // 'limit' => 7
+            
+
+        // $watchhistories = $this->WatchHistory->query('select max(id), movie_id 
+        //     from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7');
+
             )
             );
+
+        // $watchhistories = $this->WatchHistory->find('all',
+        //     array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
+        //     'order' => array('WatchHistory.created' => 'DESC'),
+        //     'limit' => 7
+        //     )
+        //     );
+        }
 
         $comments = $this->Comment->find('all');
 
@@ -154,18 +194,53 @@ class MoviesController extends AppController {
 
         $checkuser = $this->Auth->user('username');
         $this->set('checkuser', $checkuser);
+
+        $userSession = $this->Auth->user();
+    // max(id)がうまく書けないので直接SQL文を書く
+        if($userSession !== null){
+        $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
+            from watch_histories where (user_id ='.$this->Auth->user('id').') and (genre_id='.$genre_id.') 
+            group by movie_id order by max(id) DESC limit 7'
+                         );
+
+        debug(array($watchhistories_id));
+        // debug(array($watch_id));
+ // 直接SQL文を書かないやり方
+             $watchidid = array();
+                foreach ($watchhistories_id as $watchid):
+                // $watch_id = $watch_id['max(id)'];
+                $watchidid[] = $watchid[0]['max(id)'];
+                endforeach;
+                // debug($watchidid);
+                // debug($watchid[0]['max(id)']);
+
+        $watchhistories = $this->WatchHistory->find('all',
+            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'),
+                'WatchHistory.id' => $watchidid
+                ),
+            'group' => array('WatchHistory.movie_id'),    
+            // 'order' => array('WatchHistory.id' => 'DESC'),
+            // 'limit' => 7
+            
+
+        // $watchhistories = $this->WatchHistory->query('select max(id), movie_id 
+        //     from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7');
+
+            )
+            );
+
+        // $watchhistories = $this->WatchHistory->find('all',
+        //     array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
+        //     'order' => array('WatchHistory.created' => 'DESC'),
+        //     'limit' => 7
+        //     )
+        //     );
+        }
         
         $comments = $this->Comment->find('all',
             array('conditions' => array('Comment.movie_id' => $movie_id), 
             'order' => array('Comment.created' => 'DESC'),
             // 'limit' => 7
-            )
-            );
-
-        $watchhistories = $this->WatchHistory->find('all',
-            array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'), 'WatchHistory.genre_id' => $genre_id),
-            'order' => array('WatchHistory.created' => 'DESC'),
-            'limit' => 7
             )
             );
 
