@@ -37,7 +37,9 @@ class MoviesController extends AppController {
 
 // recursiveはアソシエーションの感想設定　-1は自分、0は一つ先まで
         // $this->WatchHistory->recursive = -1;
-        // $this->WatchHistory->virtualFields['id'] = 0;
+        // $this->WatchHistory->virtualFields[] = 0;
+
+    // max(id)がうまく書けないので直接SQL文を書く
         $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
              from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7'
              );
@@ -45,18 +47,17 @@ class MoviesController extends AppController {
         debug(array($watchhistories_id));
         // debug(array($watch_id));
  // 直接SQL文を書かないやり方
+             $watchidid = array();
+                foreach ($watchhistories_id as $watchid):
+                // $watch_id = $watch_id['max(id)'];
+                $watchidid[] = $watchid[0]['max(id)'];
+                endforeach;
+                // debug($watchidid);
+                // debug($watchid[0]['max(id)']);
+
         $watchhistories = $this->WatchHistory->find('all',
             array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id'),
-                'WatchHistory.id' =>
-
-                // foreach($watchhistories_id as $watch_id):
-
-
-                // array($watch_id[0]['max(id)'])
-                array($watchhistories_id[0][0]['max(id)'])
-                // endforeach;
-
-
+                'WatchHistory.id' => $watchidid
                 ),
             'group' => array('WatchHistory.movie_id'),    
             // 'order' => array('WatchHistory.id' => 'DESC'),
@@ -66,25 +67,11 @@ class MoviesController extends AppController {
         // $watchhistories = $this->WatchHistory->query('select max(id), movie_id 
         //     from watch_histories where user_id ='.$this->Auth->user('id').' group by movie_id order by max(id) DESC limit 7');
 
-             // 重複が消せないよーーーーーーーーーーーーーーーーーーーーーー！！！！！
-            // ！！！！！！！！！！！！！！！！！！！！！！！！！
-             // 'fields' => max(array('WatchHistory.id'))
             )
             );
-        // debug(array('conditions' => array('WatchHistory.user_id' => $this->Auth->user('id')),
-        //     'order' => array('WatchHistory.created' => 'DESC'),
-        //     'limit' => 7
-        //     ));
-
         $comments = $this->Comment->find('all');
 
     	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments'));
-    
-    // ユーザーネームの確認用変数 
-        // $checkuser = $this->Auth->user('username');
-        // $this->set('checkuser', $checkuser);
-
-        //$this->set('posts', $this->Post->find('all'));
     
         $this->Movie->recursive = 0;
         $this->Prg->commonProcess();
