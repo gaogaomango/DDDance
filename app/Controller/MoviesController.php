@@ -28,6 +28,7 @@ class MoviesController extends AppController {
     }
 
     public function index() {
+
     	$movies = $this->Movie->find('all');
 
         // Categoryモデルを使ってデータを取得
@@ -41,6 +42,7 @@ class MoviesController extends AppController {
 
         // コントローラーの中ではグローバル変数使えないので新たに定義
         $userSession = $this->Auth->user();
+
     // max(id)がうまく書けないので直接SQL文を書く
         if($userSession !== null){
         $watchhistories_id = $this->WatchHistory->query('select max(id), movie_id 
@@ -89,13 +91,13 @@ class MoviesController extends AppController {
         // }
 
         // 以前まではpaginateに上書きしてたからうまく行かなかった！
-          $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs)
+        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs)
             // 'limit' =>7,
             // 'order'=>array(
             //     'Movie.play_count' => 'desc'
             // )
         ;
-         $this->set('movies', $this->paginate('Movie'));
+        $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
         $this->set(compact('movie_names'));
@@ -103,6 +105,7 @@ class MoviesController extends AppController {
     }
 
     public function genre_index($genre_id = null){
+
         // $movies = $this->Movie->find('all', array('conditions' => array('genre_id' =>$genre_id)));
 
         // Categoryモデルを使ってデータを取得
@@ -158,12 +161,6 @@ class MoviesController extends AppController {
 
         $this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments', 'selectedGenre'));
     
-    // ユーザーネームの確認用変数 
-        $checkuser = $this->Auth->user('username');
-        $this->set('checkuser', $checkuser);
-
-        //$this->set('posts', $this->Post->find('all'));
-    
         $this->Movie->recursive = 0;
         $this->Prg->commonProcess();
 
@@ -191,9 +188,6 @@ class MoviesController extends AppController {
     }
 
     public function view($movie_id, $genre_id) {
-
-        $checkuser = $this->Auth->user('username');
-        $this->set('checkuser', $checkuser);
 
         $userSession = $this->Auth->user();
     // max(id)がうまく書けないので直接SQL文を書く
@@ -244,7 +238,12 @@ class MoviesController extends AppController {
             )
             );
 
-        $this->set(compact('movies', 'comments', 'watchhistories', 'movie_id', 'genre_id'));
+        $selectedGenre = $this->Genre->find('all', array('conditions' => array('id' => $genre_id)));
+
+        $genres = $this->Genre->find('all');
+
+
+        $this->set(compact('movies', 'selectedGenre', 'genres', 'comments', 'watchhistories', 'movie_id', 'genre_id'));
 
         $this->request->data['Favarite']['user_id'] = $this->Auth->user('id');
        // $this->set('checkuser', $checkuser);
@@ -253,7 +252,7 @@ class MoviesController extends AppController {
         // $this->set('checkuser', $checkuser);
 
 //ユーザーがログインしていたら履歴に追加 
-        if($checkuser !== null){
+        if($userSession !== null){
         $WatchHistory['WatchHistory'] = array(
             'movie_id' => $movie_id,
             'user_id' => $this->Auth->user('id'),
@@ -261,12 +260,12 @@ class MoviesController extends AppController {
             'genre_id' => $genre_id
             );
 
-    debug(array(
-            'movie_id' => $movie_id,
-            'user_id' => $this->Auth->user('id'),
-            'created' => null,
-            'genre_id' => $genre_id
-            ));
+    // debug(array(
+    //         'movie_id' => $movie_id,
+    //         'user_id' => $this->Auth->user('id'),
+    //         'created' => null,
+    //         'genre_id' => $genre_id
+    //         ));
 
 
         $this->WatchHistory->save($WatchHistory);
@@ -299,7 +298,7 @@ class MoviesController extends AppController {
    //     $this->layout = 'changePractice';
         $genres = $this->Genre->find('list',array('fields'=>array('id','genre_title')));
         $this->set('genres', $genres);
-
+        debug($this->request->is('post'));
         if ($this->request->is('post')) {
             $this->Movie->create();
             debug($this->request->data);
@@ -314,7 +313,7 @@ class MoviesController extends AppController {
         // idでファイル名を作成
         
         $last_id = $this->Movie->getLastInsertID();
-
+        debug($last_id);
         $new_file_name = 'P'.str_pad($last_id, 5, '0', STR_PAD_LEFT);
 
         if (is_uploaded_file($this->request->data['Movie']['upfile']['tmp_name'])) {

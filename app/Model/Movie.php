@@ -21,11 +21,29 @@ class Movie extends AppModel {
 
     public $validate = array(
             'movie_name' =>
-            
-             array('rule' => 'notEmpty',
-
+             array( 'rule1' => array('rule' => 'notEmpty',
             'message' => '動画の名前を入力してください'
             ),
+                    'rule2' =>array('rule' => 'isUnique',
+            'message' => 'その名前はすでに存在します')
+                    ),
+            'movie_tag' => array('rule' => 'notEmpty',
+            'message' => '動画のurlを入力してください'
+            ),
+            'upfile' => array(
+            'extension' => array('rule' => 'extension',
+            'message' => '適切なファイルを選択してください。'
+            )
+            ),
+            'discription' => array('rule' => 'notEmpty',
+            'message' => '動画の説明を入力してください'
+            )
+    );
+
+      public $belongsTo = array('Genre','User');
+      public $hasMany = array('Comment', 'Watch_history', 'Good', 'Favarite');
+}
+
 // 数字以外の時にエラーを吐くコード
             // 'numeric' =>
 
@@ -36,27 +54,5 @@ class Movie extends AppModel {
             // 'allowEmpty' => true,
 
             // )
-            
-// バリデーションがーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー！
-        // 'movie_tag'　=> 
-
-        //      array('rule' => 'notEmpty',
-
-        //     'message' => '動画のurlを入力してください'
-        //     ),
-        // 'upfile'　=> array('rule' => 'notEmpty',
-
-        //     'message' => 'サムネイルを選択してください'
-        //     ),
-        // 'discription'　=> array('rule' => 'notEmpty',
-
-        //     'message' => '動画の説明を入力してください'
-        //     )
-    );
-
-      public $belongsTo = array('Genre','User');
-      public $hasMany = array('Comment', 'Watch_history', 'Good', 'Favarite');
-    // public $hasMany = 'Favarite';
-    // public $hasMany = 'Good';
-}
 ?>
+

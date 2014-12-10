@@ -1,24 +1,11 @@
 <!-- File: /app/View/Users/index.ctp -->
-<?php //debug($posts); ?>
 <!-- movie index -->
 <div>
 <h1>Movie</h1>
     <td>        
         <?php 
         echo $this->Html->link("トップページへ", array('action' => 'index'));
-        if($checkuser == null){
-        echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
-        echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
-        }else{
-        echo 'ユーザーログイン';
-        echo 'ユーザー登録';
-        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
-        }?>
-    <p><?php echo $this->Html->link('一覧に戻る',array('action' => 'index'));?></p>
-    </td>
-    <td>
-        <?php 
-        if($checkuser == null){
+        if($userSession['username'] == null){
         echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
         echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
         }else{
@@ -80,9 +67,7 @@
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($movies as $movie): 
-       // debug($post);
-    ?>
+    <?php foreach ($movies as $movie):   ?>
 
     <tr>
         <td><?php echo $movie['Movie']['id']; ?></td>
@@ -112,17 +97,17 @@
         <td><?php echo $movie['Movie']['created']; ?></td>
         <td><?php echo $movie['Movie']['modified']; ?></td>
         <td><?php 
-            if($checkuser == 'adminuser'){
+            if($userSession !== null){
                 echo $this->Form->postlink('Add Favarite', array('controller' => 'favarites', 'action' => 'add', $movie['Movie']['id'], $movie['Genre']['id']));
+                echo $this->Html->link('look favarite lists' , array('controller' => 'favarites', 'action' => 'index'));
             }else{
                 echo 'add favarite';
+                echo 'look favarite lists';
         }
         ?>
         </td>
-        <td><?php echo $this->Html->link('look favarite lists' , array('controller' => 'favarites', 'action' => 'index')); ?>
-        </td>
         <td><?php 
-            if($checkuser == 'adminuser'){
+            if($userSession !== null){
                 echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
             }else{
                 echo 'Good!!';
@@ -152,9 +137,7 @@
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($genres as $genre): 
-       // debug($post);
-    ?>
+    <?php foreach ($genres as $genre):   ?>
 <!--     <tr>
         <td>
             <?php echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'movies', 'action' => 'genre_index', $genre['Genre']['id'])); 
@@ -215,9 +198,7 @@ if($userSession['username'] !== null){
 
     <?php
 
-    foreach ($watchhistories as $watchhistory):  
-           // debug($post);
-    ?>
+    foreach ($watchhistories as $watchhistory):     ?>
     <tr>
         <td><?php echo $watchhistory['Movie']['id']; ?></td>
         <td><?php echo $watchhistory['User']['id']; ?></td>
