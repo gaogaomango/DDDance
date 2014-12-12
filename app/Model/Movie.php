@@ -24,11 +24,24 @@ class Movie extends AppModel {
              array( 'rule1' => array('rule' => 'notEmpty',
             'message' => '動画の名前を入力してください'
             ),
-                    'rule2' =>array('rule' => 'isUnique',
+                    'rule2' => array('rule' => 'isUnique',
             'message' => 'その名前はすでに存在します')
                     ),
-            'movie_tag' => array('rule' => 'notEmpty',
-            'message' => '動画のurlを入力してください'
+            // 'movie_tag' => 
+            // // array( 'rule1' => array('rule' => 'notEmpty',
+            // // 'message' => '動画のurlを入力してください'
+            // // ),
+            //         // 'rule2' => 
+            //         array('rule' => 'url',
+            // 'message' => 'urlを貼り付けてください'
+            // // )
+            // ),
+            
+             // 再びバリデーション！！！！！！！！！！！！！！
+            'movie_tag' => array(
+            'url' => array('rule' => array('url', true),
+            'message' => 'URLを入力して下さい。'
+            )
             ),
             'upfile' => array(
             'extension' => array('rule' => 'extension',
