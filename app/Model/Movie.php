@@ -4,9 +4,10 @@ class Movie extends AppModel {
     public $order = array('Movie.id DESC');
     public $actsAs = array('Search.Searchable');
     public $filterArgs = array(
-        // 'movie_name' => array('type' => 'value'),
+        'search_type' => array('type' => 'value',
+            'field' => array('Genre.id')),
         'keyword' => array('type' => 'like', 
-            'field' => array('Movie.movie_name', 'Genre.genre_title', 'Movie.discription'),
+        'field' => array('Movie.movie_name', 'Genre.genre_title', 'Movie.discription'),
         'connectorAnd' => '+', 'connectorOr' => ' '),
     );
 
@@ -27,17 +28,6 @@ class Movie extends AppModel {
                     'rule2' => array('rule' => 'isUnique',
             'message' => 'その名前はすでに存在します')
                     ),
-            // 'movie_tag' => 
-            // // array( 'rule1' => array('rule' => 'notEmpty',
-            // // 'message' => '動画のurlを入力してください'
-            // // ),
-            //         // 'rule2' => 
-            //         array('rule' => 'url',
-            // 'message' => 'urlを貼り付けてください'
-            // // )
-            // ),
-            
-             // 再びバリデーション！！！！！！！！！！！！！！
             'movie_tag' => array(
             'url' => array('rule' => array('url', true),
             'message' => 'URLを入力して下さい。'

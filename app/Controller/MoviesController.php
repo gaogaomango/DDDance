@@ -55,7 +55,7 @@ class MoviesController extends AppController {
              $watchidid = array();
                 foreach ($watchhistories_id as $watchid):
                 // $watch_id = $watch_id['max(id)'];
-                $watchidid[] = $watchid[0]['max(id)'];
+            $watchidid[] = $watchid[0]['max(id)'];
                 endforeach;
                 // debug($watchidid);
                 // debug($watchid[0]['max(id)']);
@@ -91,16 +91,25 @@ class MoviesController extends AppController {
         // }
 
         // 以前まではpaginateに上書きしてたからうまく行かなかった！
-        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs)
-            // 'limit' =>7,
-            // 'order'=>array(
-            //     'Movie.play_count' => 'desc'
-            // )
-        ;
+        debug($this->request->data);
+        if(isset($this->request->data['Movie']['search_type'])){
+        if($this->request->data['Movie']['search_type'] > 0){
+        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
+        }
+        else
+        {
+        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
+        unset($this->paginate['conditions']['Genre.id']);
+        }
+        }else{
+            $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);      
+        } 
+    
         $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
         $this->set(compact('movie_names'));
+        
 
     }
 
@@ -302,9 +311,13 @@ class MoviesController extends AppController {
         if ($this->request->is('post')) {
             $this->Movie->create();
             debug($this->request->data);
-            // debug($_FILES);
-            $this->request->data['Movie']['movie_tag'] = $this->_embTag($this->request->data['Movie']['movie_tag']);
 
+            $this->Movie->set($this->request->data);
+            // debug($_FILES);
+            // 先にバリデーションをかます。なぜなら変更した後にバリデーションした全部アウト
+            if($this->Movie->validates() == true){
+            $this->request->data['Movie']['movie_tag'] = $this->_embTag($this->request->data['Movie']['movie_tag']);
+            $this->Movie->save($this->request->data, false);
             if ($this->Movie->save($this->request->data)) {
                 $this->Session->setFlash(__('The Movie has been saved.'));
                 // return $this->redirect(array('action' => 'index'));
@@ -330,6 +343,8 @@ class MoviesController extends AppController {
             echo 'ファイルが選択されていません。';
             }
 
+            }
+            
             $this->Session->setFlash(__('Unable to add the Movie.'));
         }
     }
