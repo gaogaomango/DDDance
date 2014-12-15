@@ -91,7 +91,7 @@ class MoviesController extends AppController {
         // }
 
         // 以前まではpaginateに上書きしてたからうまく行かなかった！
-        debug($this->request->data);
+        // debug($this->request->data);
         if(isset($this->request->data['Movie']['search_type'])){
         if($this->request->data['Movie']['search_type'] > 0){
         $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
@@ -206,7 +206,7 @@ class MoviesController extends AppController {
             group by movie_id order by max(id) DESC limit 7'
                          );
 
-        debug(array($watchhistories_id));
+        // debug(array($watchhistories_id));
         // debug(array($watch_id));
  // 直接SQL文を書かないやり方
              $watchidid = array();

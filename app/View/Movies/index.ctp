@@ -56,7 +56,7 @@
 
                 ?>
             </div>
-        </div>
+</div>
 
         <?php echo $this->Form->end('検索'); ?>
     </div>

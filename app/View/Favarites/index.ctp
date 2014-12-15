@@ -14,7 +14,29 @@
         <fieldset>
             <legend>検索</legend>
         </fieldset>
-         <?php echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?>
+         <!-- 検索機能の全体検索かジャンル検索かを手動で切り替える方法 -->
+ <div class="control-group">
+        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
+            <div class="controls">
+                <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容'));
+                        
+                $options = array(
+                    -1 => '全体検索',
+                    1 => 'HIPHOP',
+                    2 => 'HOUSE',
+                    3 => 'LOCK',
+                    4 => 'POP',
+                    5 => 'SOUL',
+                    6 => 'BREAK'
+                    )
+                    ;
+                    $attributes = array('default' => -1, 'class' => 'radio inline');
+                     
+                    echo $this->Form->radio('search_type', $options, $attributes);
+
+                ?>
+            </div>
+</div>
         <?php echo $this->Form->end('検索'); ?>
     </div>
 
