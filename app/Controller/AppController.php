@@ -44,6 +44,7 @@ class AppController extends Controller {
 
     public function beforeFilter() {
 
+        $this->layout = 'dddanceMovie';
         $this->Auth->allow();
         
         //AuthComponentの設定

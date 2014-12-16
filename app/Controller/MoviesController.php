@@ -24,6 +24,8 @@ class MoviesController extends AppController {
 
         parent ::beforeFilter();
 
+        $this->layout = 'dddanceMovie';
+
         $this->Auth->allow();
     }
 

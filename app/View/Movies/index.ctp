@@ -1,5 +1,15 @@
 <!-- File: /app/View/Users/index.ctp -->
-<?php //debug($posts); ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>DDDance</title>
+     <!-- HTML5 -->
+<!-- <link rel="stylesheet" href="css/style.css" media="screen and (max-width:6400px)">
+<link rel="stylesheet" href="css/medium.css" media="screen and (min-width:640px) and (max-width:1536px)">
+<link rel="stylesheet" href="css/wide.css" media="screen and (min-width:1024px)"> -->
+</head>
+
 <!-- movie index -->
 <div>
 <h1>Movie</h1>
@@ -24,18 +34,65 @@
     <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
     </td>
 
-    <div>
-        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
-        <fieldset>
-            <legend>検索</legend>
-        </fieldset>
 
 
-<!--   <?php 
-          echo $this->Form->input('keyword', array('label' => '検索バー', 'class' => 'span12', 'placeholder' => '検索内容')); ?> -->
+<?php $this->Html->scriptStart(array('inline'=>false)); ?>
+
+$(document).ready(function(){
+  
+  var $searchTrigger = $('[data-ic-class="search-trigger"]'),
+      $searchInput = $('[data-ic-class="search-input"]'),
+      $searchClear = $('[data-ic-class="search-clear"]');
+  
+  $searchTrigger.click(function(){
+    
+    var $this = $('[data-ic-class="search-trigger"]');
+    $this.addClass('active');
+    $searchInput.focus();
+    
+  });
+  
+  $searchInput.blur(function(){
+    
+    if($searchInput.val().length > 0){
+      
+      return false;
+      
+    } else {
+      
+      $searchTrigger.removeClass('active');
+      
+    }
+    
+  });
+  
+  $searchClear.click(function(){
+    $searchInput.val('');
+  });
+  
+  $searchInput.focus(function(){
+    $searchTrigger.addClass('active');
+  });
+  
+});
+<?php $this->Html->scriptEnd(); ?>
+
+    <div class="wrapper">
+          <div class="icon-search-container" data-ic-class="search-trigger">
+            <span class="fa fa-search"></span>
+            <input type="text" class="search-input" data-ic-class="search-input" placeholder="Search"/>
+            <span class="fa fa-times-circle" data-ic-class="search-clear"></span>
+          </div>
+    </div>
+
+<div>
+    <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+<fieldset>
+    <legend>検索</legend>
+</fieldset>
 
  <!-- 検索機能の全体検索かジャンル検索かを手動で切り替える方法 -->
- <div class="control-group">
+    <div class="control-group">
         <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
             <div class="controls">
                 <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容'));
@@ -53,13 +110,12 @@
                     $attributes = array('default' => -1, 'class' => 'radio inline');
                      
                     echo $this->Form->radio('search_type', $options, $attributes);
-
                 ?>
             </div>
-</div>
+    </div>
 
         <?php echo $this->Form->end('検索'); ?>
-    </div>
+</div>
 
      <?php
          echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
