@@ -8,11 +8,145 @@
 <!-- <link rel="stylesheet" href="css/style.css" media="screen and (max-width:6400px)">
 <link rel="stylesheet" href="css/medium.css" media="screen and (min-width:640px) and (max-width:1536px)">
 <link rel="stylesheet" href="css/wide.css" media="screen and (min-width:1024px)"> -->
+
+<?php $this->Html->scriptStart(array('inline'=>false)); ?>
+
+$(document).ready(function(){
+  
+  var $searchTrigger = $('[data-ic-class="search-trigger"]'),
+      $searchInput = $('[data-ic-class="search-input"]'),
+      $searchClear = $('[data-ic-class="search-clear"]');
+
+     $('#genre_choice').hide();
+     $('#search_end').hide();
+     
+  
+  $searchTrigger.click(function(){
+    
+    var $this = $('[data-ic-class="search-trigger"]');
+    $this.addClass('active');
+    $searchInput.focus();
+    
+    $('#genre_choice').toggle('slow');
+    $('#search_end').toggle('slow');
+     
+  });
+  
+  $searchInput.blur(function(){
+    
+    if($searchInput.val().length > 0){
+      
+      return false;
+      
+    } else {
+      
+      $searchTrigger.removeClass('active');
+      $('#genre_choice').hide();
+      $('#search_end').hide();
+     
+    }
+    
+  });
+  
+  $searchClear.click(function(){
+    $searchInput.val('');
+  });
+  
+  $searchInput.focus(function(){
+    $searchTrigger.addClass('active');
+  });
+  
+});
+<?php $this->Html->scriptEnd(); ?>
+
 </head>
 
 <!-- movie index -->
 <div>
-<h1>Movie</h1>
+<body>
+<header>    
+    <div id="header-fixed">
+        <div id = "header-bk">
+            <div id = "header"> 
+            <h1 class = "title">DDDance</h1>
+                <div class = "header-fixed_login-search">
+                <div class="login-btn">
+                <!-- <a href="javascript:return false;" class="btn-push login"> -->
+                     <?php echo $this->Html->link(
+                     'ユーザーログイン',
+                     array('controller' => 'users', 'action' => 'login'),
+                     array('class' => array('btn-push','login'))); ?>
+                    <!-- <?php $this->Html->script('javascript:return false;',array('controller' => 'users', 'action' => 'login'), array('class' => array('btn-push','login'))); ?> -->
+                <!-- </a> -->
+                <a href="javascript:return false;" class="btn-push login">ログアウト</a>
+                <a href="javascript:return false;" class="btn-push login">ユーザー登録</a>
+                </div>
+                    <div class="search_bar">
+                        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+<!-- <fieldset>
+    <legend>検索</legend>
+</fieldset> -->
+
+ <!-- 検索機能の全体検索かジャンル検索かを手動で切り替える方法 -->
+<!--                     <div class="control-group">
+                        <?php echo $this->Form->label('keyword', '', array('class' => 'control-label')); ?> -->
+                            <!-- <div class="controls"> -->
+                                <div class="wrapper">
+                                  <div class="icon-search-container" data-ic-class="search-trigger">
+                                    <span class="fa fa-search"></span>
+                                     <!-- <input type="text" class="search-input" data-ic-class="search-input" placeholder="Search"/>  -->
+                                     <?php echo $this->Form->text('keyword', array('class' => 'search-input', 'data-ic-class' =>'search-input', 'placeholder' => '検索内容')); ?>
+                                
+                                    <span class="fa fa-times-circle" data-ic-class="search-clear"></span>
+                                  </div>
+                                </div>
+                                <div id='genre_choice'>
+                               <?php 
+                                 // echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容'));       
+                                $options = array(
+                                    -1 => '全体検索',
+                                    1 => 'HIPHOP',
+                                    2 => 'HOUSE',
+                                    3 => 'LOCK',
+                                    4 => 'POP',
+                                    5 => 'SOUL',
+                                    6 => 'BREAK'
+                                    )
+                                    ;
+                                    $attributes = array('default' => -1, 'class' => 'radio inline');
+                                     
+                                    echo $this->Form->radio('search_type', $options, $attributes);
+                                ?>
+                                </div>
+                            </div>
+                    <!-- </div> -->
+    <div id='search_end'>
+        <?php echo $this->Form->end(); ?>
+    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>  
+</header>
+<NAV>
+
+<div class="fixposition2 no-kaigyou">
+    <a href="javascript:return false;" class="btn-push">ホーム</a>
+    <a href="javascript:return false;" class="btn-push navy">HIPHOP</a>
+    <a href="javascript:return false;" class="btn-push green">HOUSE</a>
+    <a href="javascript:return false;" class="btn-push red">POP</a>
+    <a href="javascript:return false;" class="btn-push blue">LOCK</a>
+    <a href="javascript:return false;" class="btn-push orange">BREAKING</a>
+    <a href="javascript:return false;" class="btn-push navy">お気に入り</a>
+    <a href="javascript:return false;" class="btn-push green">履歴</a>
+    <a href="javascript:return false;" class="btn-push red">ジャンル掲示板</a>
+    <a href="javascript:return false;" class="btn-push blue">動画投稿</a>
+</div>
+
+</NAV>
+
+<!-- ここのデータを上のやつに移行が必要！！！！！！！！！！ -->
     <td><?php 
         if($userSession['username'] !== null){
             echo $this->Html->link('Add Movie', array('action' => 'add'));
@@ -34,96 +168,13 @@
     <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
     </td>
 
-
-
-<?php $this->Html->scriptStart(array('inline'=>false)); ?>
-
-$(document).ready(function(){
-  
-  var $searchTrigger = $('[data-ic-class="search-trigger"]'),
-      $searchInput = $('[data-ic-class="search-input"]'),
-      $searchClear = $('[data-ic-class="search-clear"]');
-  
-  $searchTrigger.click(function(){
-    
-    var $this = $('[data-ic-class="search-trigger"]');
-    $this.addClass('active');
-    $searchInput.focus();
-    
-  });
-  
-  $searchInput.blur(function(){
-    
-    if($searchInput.val().length > 0){
-      
-      return false;
-      
-    } else {
-      
-      $searchTrigger.removeClass('active');
-      
-    }
-    
-  });
-  
-  $searchClear.click(function(){
-    $searchInput.val('');
-  });
-  
-  $searchInput.focus(function(){
-    $searchTrigger.addClass('active');
-  });
-  
-});
-<?php $this->Html->scriptEnd(); ?>
-
-    <div class="wrapper">
-          <div class="icon-search-container" data-ic-class="search-trigger">
-            <span class="fa fa-search"></span>
-            <input type="text" class="search-input" data-ic-class="search-input" placeholder="Search"/>
-            <span class="fa fa-times-circle" data-ic-class="search-clear"></span>
-          </div>
-    </div>
-
-<div>
-    <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
-<fieldset>
-    <legend>検索</legend>
-</fieldset>
-
- <!-- 検索機能の全体検索かジャンル検索かを手動で切り替える方法 -->
-    <div class="control-group">
-        <?php echo $this->Form->label('keyword', 'キーワード', array('class' => 'control-label')); ?>
-            <div class="controls">
-                <?php echo $this->Form->text('keyword', array('class' => 'span12', 'placeholder' => '検索内容'));
-                        
-                $options = array(
-                    -1 => '全体検索',
-                    1 => 'HIPHOP',
-                    2 => 'HOUSE',
-                    3 => 'LOCK',
-                    4 => 'POP',
-                    5 => 'SOUL',
-                    6 => 'BREAK'
-                    )
-                    ;
-                    $attributes = array('default' => -1, 'class' => 'radio inline');
-                     
-                    echo $this->Form->radio('search_type', $options, $attributes);
-                ?>
-            </div>
-    </div>
-
-        <?php echo $this->Form->end('検索'); ?>
-</div>
-
      <?php
          echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
          echo $this->Paginator->numbers(array('separator' => ''));
          echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
     ?>
 
-
+<section id="section-fixed">
 <table>
     <tr>
         <th><?php echo $this->Paginator->sort('id','ID')?></th>
@@ -205,6 +256,7 @@ $(document).ready(function(){
 <?php endforeach; ?>
 <?php unset($movie); ?>
 </table>
+</section>
 </div>
 
 <!-- genre index -->
@@ -304,3 +356,5 @@ else{
     echo 'ログインすれば履歴を見る事が出来ます';
 }
 ?>
+
+</body>
