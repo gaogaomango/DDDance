@@ -69,18 +69,32 @@ $(document).ready(function(){
         <div id = "header-bk">
             <div id = "header"> 
             <h1 class = "title">DDDance</h1>
+            <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
                 <div class = "header-fixed_login-search">
                 <div class="login-btn">
                 <!-- <a href="javascript:return false;" class="btn-push login"> -->
-                     <?php echo $this->Html->link(
-                     'ユーザーログイン',
-                     array('controller' => 'users', 'action' => 'login'),
-                     array('class' => array('btn-push','login'))); ?>
-                    <!-- <?php $this->Html->script('javascript:return false;',array('controller' => 'users', 'action' => 'login'), array('class' => array('btn-push','login'))); ?> -->
+                     <?php
+                     if($userSession['username'] == null){
+                     echo $this->Html->link(
+                     'ユーザーログイン', array('controller' => 'users', 'action' => 'login'),
+                     array('class' => array('btn-push','login')));
+
+
+                     echo $this->Html->link('ユーザー登録', 
+                     array('controller' => 'users', 'action' => 'add'),
+                     array('class' => array('btn-push','login')));
+
+                    }else{
+                     echo $this->Html->link('ユーザーログアウト', 
+                     array('controller' => 'users', 'action' => 'logout'),
+                     array('class' => array('btn-push','login')));
+                    }
+                      ?>
                 <!-- </a> -->
-                <a href="javascript:return false;" class="btn-push login">ログアウト</a>
-                <a href="javascript:return false;" class="btn-push login">ユーザー登録</a>
+                <!-- <a href="javascript:return false;" class="btn-push login">ログアウト</a>
+                <a href="javascript:return false;" class="btn-push login">ユーザー登録</a> -->
                 </div>
+
                     <div class="search_bar">
                         <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
 <!-- <fieldset>
@@ -142,31 +156,16 @@ $(document).ready(function(){
     <a href="javascript:return false;" class="btn-push green">履歴</a>
     <a href="javascript:return false;" class="btn-push red">ジャンル掲示板</a>
     <a href="javascript:return false;" class="btn-push blue">動画投稿</a>
+<!-- こいつを上の動画投稿にくっつける！！！！！！！！ -->
+                        <!-- if($userSession['username'] !== null){
+                            echo $this->Html->link('Add Movie', array('action' => 'add'));
+                       }else{
+                            echo 'Add Movie';
+                        } -->
+
 </div>
 
 </NAV>
-
-<!-- ここのデータを上のやつに移行が必要！！！！！！！！！！ -->
-    <td><?php 
-        if($userSession['username'] !== null){
-            echo $this->Html->link('Add Movie', array('action' => 'add'));
-        }else{
-            echo 'Add Movie';
-    }
-    ?>
-    </td>
-    <td>
-        <?php 
-        if($userSession['username'] == null){
-        echo $this->Html->link('ユーザーログイン' ,array('controller' => 'users', 'action' => 'login'));
-        echo $this->Html->link('ユーザー登録', array('controller' => 'users', 'action' => 'add'));
-        }else{
-        echo 'ユーザーログイン';
-        echo 'ユーザー登録';
-        echo $this->Html->link('ユーザーログアウト' ,array('controller' => 'users', 'action' => 'logout'));
-        }?>
-    <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
-    </td>
 
      <?php
          echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
@@ -195,9 +194,7 @@ $(document).ready(function(){
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($movies as $movie): 
-       // debug($post);
-    ?>
+    <?php foreach ($movies as $movie): ?>
 
     <tr>
         <td><?php echo $movie['Movie']['id']; ?></td>
@@ -269,9 +266,7 @@ $(document).ready(function(){
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($genres as $genre): 
-       // debug($post);
-    ?>
+    <?php foreach ($genres as $genre): ?>
 <!--     <tr>
         <td>
             <?php echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'movies', 'action' => 'genre_index', $genre['Genre']['id'])); 
