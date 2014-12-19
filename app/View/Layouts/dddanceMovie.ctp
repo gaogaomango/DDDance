@@ -29,7 +29,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->script('jquery-2.1.1.min', array('incline' => false)); 
-        echo $this->Html->css('style.css');
+        echo $this->Html->css('dddancemain.css');
 		echo $this->Html->css('font-awesome.min.css');
 		echo $this->Html->css('font-awesome.css');
 

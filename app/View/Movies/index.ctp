@@ -3,6 +3,7 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>DDDance</title>
      <!-- HTML5 -->
 <!-- <link rel="stylesheet" href="css/style.css" media="screen and (max-width:6400px)">
@@ -69,7 +70,6 @@ $(document).ready(function(){
         <div id = "header-bk">
             <div id = "header"> 
             <h1 class = "title">DDDance</h1>
-            <p><?php echo 'ユーザー情報', $userSession['username']; ?></p>
                 <div class = "header-fixed_login-search">
                 <div class="login-btn">
                 <!-- <a href="javascript:return false;" class="btn-push login"> -->
@@ -78,7 +78,6 @@ $(document).ready(function(){
                      echo $this->Html->link(
                      'ユーザーログイン', array('controller' => 'users', 'action' => 'login'),
                      array('class' => array('btn-push','login')));
-
 
                      echo $this->Html->link('ユーザー登録', 
                      array('controller' => 'users', 'action' => 'add'),
@@ -106,6 +105,7 @@ $(document).ready(function(){
                         <?php echo $this->Form->label('keyword', '', array('class' => 'control-label')); ?> -->
                             <!-- <div class="controls"> -->
                                 <div class="wrapper">
+                                  <p id = "user-info"><?php echo 'ユーザー情報', $userSession['username']; ?></p>
                                   <div class="icon-search-container" data-ic-class="search-trigger">
                                     <span class="fa fa-search"></span>
                                      <!-- <input type="text" class="search-input" data-ic-class="search-input" placeholder="Search"/>  -->
@@ -146,23 +146,37 @@ $(document).ready(function(){
 <NAV>
 
 <div class="fixposition2 no-kaigyou">
-    <a href="javascript:return false;" class="btn-push">ホーム</a>
-    <a href="javascript:return false;" class="btn-push navy">HIPHOP</a>
-    <a href="javascript:return false;" class="btn-push green">HOUSE</a>
-    <a href="javascript:return false;" class="btn-push red">POP</a>
-    <a href="javascript:return false;" class="btn-push blue">LOCK</a>
-    <a href="javascript:return false;" class="btn-push orange">BREAKING</a>
-    <a href="javascript:return false;" class="btn-push navy">お気に入り</a>
-    <a href="javascript:return false;" class="btn-push green">履歴</a>
-    <a href="javascript:return false;" class="btn-push red">ジャンル掲示板</a>
-    <a href="javascript:return false;" class="btn-push blue">動画投稿</a>
-<!-- こいつを上の動画投稿にくっつける！！！！！！！！ -->
-                        <!-- if($userSession['username'] !== null){
-                            echo $this->Html->link('Add Movie', array('action' => 'add'));
-                       }else{
-                            echo 'Add Movie';
-                        } -->
+  <ul class="genre-list">
+    <li><?php echo $this->Html->link("ホーム", array('controller' => 'movies', 'action' => 'index'), array('class' => array('btn-push'))); ?></li>
+    <li><?php echo $this->Html->link('HIPHOP', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 1), array('class' => array('btn-push','navy'))); ?></li>
+    <li><?php echo $this->Html->link('HOUSE', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 2), array('class' => array('btn-push','green'))); ?></li>
+    <li><?php echo $this->Html->link('LOCK', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 3), array('class' => array('btn-push','orange'))); ?></li>
+    <li><?php echo $this->Html->link('POP', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 4), array('class' => array('btn-push','navy'))); ?></li>
+    <li><?php echo $this->Html->link('SOUL', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 5), array('class' => array('btn-push','green'))); ?></li>
+    <li><?php echo $this->Html->link('BREAK', array('controller' => 'movies', 'action' => 'genre_index', $genres[0]['Genre']['id'] => 6), array('class' => array('btn-push','red'))); ?></li>
+    <li><?php if($userSession['username'] !== null){
+        echo $this->Html->link('お気に入り', array('controller' => 'favarites', 'action' => 'index'), array('class' => array('btn-push','blue')));
+            }else{
+        echo $this->Html->link('お気に入り', 'javascript:return false;', array('class' => array('btn-push','blue')), "ログイン後にお気に入り機能使えますよ");        
+            }
+         ?></li>
+    
+    <!-- アプリ版の履歴の見方を検討する必要あり！！！！！！！！！！！！リスト形式でダラーっと出てくる系？？？？ -->
+    <li><?php if($userSession['username'] !== null){
+        echo $this->Html->link('履歴', array('controller' => 'WatchHistories', 'action' => 'index', $userSession['username']), array('class' => array('btn-push','orange')));
+            }else{
+        echo $this->Html->link('履歴', 'javascript:return false;', array('class' => array('btn-push','orange')), "ログイン後に履歴も使えますよ！");        
+            }
+         ?></li>
 
+    <li><?php echo $this->Html->link('ジャンル掲示板', 'javascript:return false;', array('class' => array('btn-push','navy')), "まだないです"); ?></li>
+
+    <li><?php if($userSession['username'] !== null){
+        echo $this->Html->link('動画投稿', array('action' => 'add'),array('class' => array('btn-push','blue')));
+            }else{
+        echo $this->Html->link('動画投稿', 'javascript:return false;', array('class' => array('btn-push','blue')), "ログイン後に動画投稿できます");
+                         }?></li>
+    </ul>
 </div>
 
 </NAV>
@@ -181,7 +195,6 @@ $(document).ready(function(){
         <th><?php echo $this->Paginator->sort('genre_id','GENRE_ID')?></th>
         <th><?php echo $this->Paginator->sort('movie_name','MOVIE_NAME')?></th>
         <th>THUMBNAIL</th>
-        <!-- <th><?php echo $this->Paginator->sort('movie_tag','MOVIE_TAG')?></th> -->
         <th><?php echo $this->Paginator->sort('discription','DISCRIPTION')?></th>
         <th><?php echo $this->Paginator->sort('play_count','PLAY_COUNT')?></th>
         <th>Action</th>
@@ -200,21 +213,11 @@ $(document).ready(function(){
         <td><?php echo $movie['Movie']['id']; ?></td>
         <td><?php echo $movie['User']['id']; ?></td>
         <td><?php echo $movie['Genre']['genre_title'];?></td>
-        <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id'])); ?>
-        </td>
+        <td><?php echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id'])); ?></td>
         <td><?php echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id']), array('escape' => false)); ?>
         </td>
         <td><?php echo $movie['Movie']['discription'];?></td>
         <td><?php echo $movie['Movie']['play_count'];?></td>
-<!--         <td><?php if(isset($movie['Watch_history'])){
-            echo '再生回数 : ';
-            echo count($movie['Watch_history']);
-            echo '回';
-            }else{
-                echo '0だよーん';
-            }
-             ?>
-        </td> -->
         <td>
             <?php echo $this->Html->link('Edit', array('action' => 'edit', $movie['Movie']['id'])); ?>
         </td>
@@ -250,8 +253,62 @@ $(document).ready(function(){
              ?>
         </td>
     </tr>
+<!-- モバイル用のページセクション -->
+    <div class="movie1">
+        <dt class="movie1_title"><?php 
+            echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id'])); ?>
+        </dt>
+        <dd class="movie1_sumbnail"><?php
+            echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id']), array('escape' => false)); ?>
+        </dd>
+        <dd class="movie1_sums"> 
+            概要  <br>
+            <?php echo $movie['Movie']['discription'];?><br> 
+            ジャンル名 <br>
+            <?php echo $movie['Genre']['genre_title'];?><br>
+            いいね数　<br>
+            <?php 
+            if($userSession['username'] !== null){
+                echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
+            }else{
+                echo 'Good!!';
+            }
+            if(isset($movie['Good'])){
+                echo count($movie['Good']);
+                }else{
+                    echo '0';
+                }
+            ?><br>
+            再生回数 <br>  
+            <?php echo $movie['Movie']['play_count'];?><br>
+        </dd>
+    </div>
+
 <?php endforeach; ?>
 <?php unset($movie); ?>
+
+<!-- watch_history -->
+     <div class="movie2">
+        <?php if($userSession['username'] !== null){
+            foreach ($watchhistories as $watchhistory): ?>
+    
+        <dt class="movie2_title"><?php echo $this->Html->link($watchhistory['Movie']['movie_name'], array('controller' => 'movies', 'action' => 'view', $watchhistory['Movie']['id'], $watchhistory['Movie']['genre_id'])); ?> 
+        </dt>
+        <dd class="movie2_sumbnail"><?php echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($watchhistory['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('controller' => 'movies', 'action' => 'view', $watchhistory['Movie']['id'], $watchhistory['Movie']['genre_id']), array('escape' => false)); ?>
+        </dd>
+        <dd class="movie2_sums"><?php echo $watchhistory['Genre']['genre_title'];?>
+            <?php echo $watchhistory['Movie']['play_count'];?>
+            <?php echo $watchhistory['WatchHistory']['created']; ?></dd>
+    
+<?php endforeach;
+}
+else{
+    echo '<h1>WatchHistory</h1>';
+    echo 'ログインすれば履歴を見る事が出来ます';
+}
+?>
+    </div>
+
 </table>
 </section>
 </div>

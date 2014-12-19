@@ -29,11 +29,13 @@ body {
 #user-info{
 	float: right;
 	top: 0px;
+	/*margin: 0 auto; 	*/
 }
 
 /*ログイン系*/
 .header-fixed_login-search{
 	float: right;
+	/*overflow: hidden;*/
 }
 
 /*ログインボタン位置*/
@@ -55,12 +57,14 @@ body {
 
 .wrapper {
   text-align: center;
+  /*float: left;*/
   top:0px;
   margin: 0 auto;
   overflow: hidden;
 }
 .genre_choice{
   text-align: center;
+  /*float: right;*/
   top:0px;
   margin: 0 auto;	
 }
@@ -403,6 +407,162 @@ ul.genre-list li {
 	/*border: 1px solid #000000;*/
 	/*padding: 100px #000000;*/
 	/*margin: 10px auto;*/
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie3{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie3_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie3_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie4{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie4_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie4_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie5{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie5_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie5_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie6{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie6_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie6_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie7{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie7_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie7_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 560px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie8{
+	overflow: hidden;
+	/*border: 1px solid #000000;*/
+}
+
+.movie8_sumbnail{
+	background: #2ecc71;
+	float: left;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
+	width: 400px;
+	height: 400px;
+	font-size: 25px;
+}
+
+.movie8_sums{
+	float: right;
+	/*border: 1px solid #000000;*/
+	/*padding: 100px #000000;*/
+	margin: 10px auto;
 	width: 560px;
 	height: 400px;
 	font-size: 25px;

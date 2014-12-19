@@ -134,7 +134,7 @@ class MoviesController extends AppController {
             group by movie_id order by max(id) DESC limit 7'
                          );
 
-        debug(array($watchhistories_id));
+        // debug(array($watchhistories_id));
         // debug(array($watch_id));
  // 直接SQL文を書かないやり方
              $watchidid = array();
@@ -340,7 +340,7 @@ class MoviesController extends AppController {
             echo 'ファイルをアップロードできません。';
              }
 // indexに戻る処理
-             // $this->redirect($this->Auth->redirect());
+             $this->redirect($this->Auth->redirect());
             } else {
             echo 'ファイルが選択されていません。';
             }
@@ -400,7 +400,7 @@ class MoviesController extends AppController {
         }
     $emb = mb_substr($emb2, 2);
     //return $emb;
-    return $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$emb.'" frameborder="0" allowfullscreen></iframe> ';
+    return $this->request->data['Movie']['movie_tag'] = ' <iframe width="640" height="480" src="http://www.youtube.com/embed/'.$emb.'?autoplay=1" frameborder="0" allowfullscreen></iframe> ';
 
 }
 
