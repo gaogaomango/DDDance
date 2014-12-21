@@ -15,10 +15,7 @@
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($posts as $post): 
-       // debug($post);
-
-    ?>
+    <?php foreach ($posts as $post):  ?>
     <tr>
         <td><?php echo $post['Post']['id']; ?></td>
         <td>
@@ -35,7 +32,7 @@
                   ?>
         </td>
        <td>
-            <?php echo $this->Html->link($post['Category']['name'], array('controller' => 'posts', 'action' => 'category_index', $post['Category']['id'])); ?>
+            <?php echo $this->Html->link($post['Genre']['genre_title'], array('controller' => 'posts', 'action' => 'category_index', $post['Genre']['id'])); ?>
         </td>
         <td><?php echo $post['Post']['created']; ?></td>
     </tr>
@@ -45,5 +42,5 @@
 </div>
 
 <div style="float:right;">
-    <?php echo $this->element('rightside_menu');?>
+     <?php  echo $this->element('rightside_menu');?>
 </div>

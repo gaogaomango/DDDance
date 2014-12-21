@@ -1,26 +1,24 @@
 <table>
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
-    <?php foreach ($categories as $category): 
-       // debug($post);
-    ?>
+    <?php foreach ($genres as $genre): ?>
     <tr>
         <!-- 先生の解答、リンクを消す -->
         <td>
             <?php 
-            if (isset ($selectedCategory)){
-	            if ($selectedCategory[0]['Category']['id'] == $category['Category']['id']){
-                echo $category['Category']['name'];
+            if (isset ($selectedGenre)){
+	            if ($selectedGenre[0]['Genre']['id'] == $genre['Genre']['id']){
+                echo $genre['Genre']['genre_title'];
             }else{
-                echo $this->Html->link($category['Category']['name'], array('controller' => 'posts','action' => 'category_index', $category['Category']['id']));
+                echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'posts','action' => 'genre_index', $genre['Genre']['id']));
                  }
             }else{
-            	echo $this->Html->link($category['Category']['name'], array('controller' => 'posts','action' => 'category_index', $category['Category']['id']));
+            	echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'posts','action' => 'genre_index', $genre['Genre']['id']));
             }
              ?>
         </td>
     </tr>
 
     <?php endforeach; ?>
-    <?php unset($category); ?>
+    <?php unset($genre); ?>
 </table>
