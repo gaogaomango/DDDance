@@ -1,13 +1,13 @@
 <!-- File: /app/View/Posts/index.ctp -->
 <?php  // debug($posts); ?>
-<h1>Blog posts</h1>
+<h1>掲示板</h1>
 <!-- 自分の解答（中にない時エラー） -->
 <!-- <h2>カテゴリ「
         <?php echo $posts[0]['Category']['name']; ?>
         」の一覧</h2> -->
 
 <!-- 先生の解答 -->
-<h2>カテゴリー「<?php echo $selectedCategory[0]['Category']['name']; ?>」の一覧</h2>
+<h2>カテゴリー「<?php echo $selectedGenre[0]['Genre']['genre_title']; ?>」の一覧</h2>
 
 <p><?php echo $this->Html->link("Add Post", array('action' => 'add')); ?></p>
 <div style="float:left;">

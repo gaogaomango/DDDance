@@ -58,6 +58,16 @@ $(document).ready(function(){
   });
   
 });
+
+function kakunin(){
+  obj = document.sorttable.linkselect;
+
+  index = obj.selectedIndex;
+  if (index != 0){
+    href = obj.options[index].value;
+    location.href = href;
+  }
+}
 <?php $this->Html->scriptEnd(); ?>
 
 </head>
@@ -94,8 +104,8 @@ $(document).ready(function(){
                 <a href="javascript:return false;" class="btn-push login">ユーザー登録</a> -->
                 </div>
 
-                    <div class="search_bar">
-                        <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
+                <div class="search_bar">
+                    <?php echo $this->Form->create('Movie', array('action'=>'index')); ?>
 <!-- <fieldset>
     <legend>検索</legend>
 </fieldset> -->
@@ -143,7 +153,7 @@ $(document).ready(function(){
         </div>
     </div>  
 </header>
-<NAV>
+<nav>
 
 <div class="fixposition2 no-kaigyou">
   <ul class="genre-list">
@@ -169,27 +179,39 @@ $(document).ready(function(){
             }
          ?></li>
 
-    <li><?php echo $this->Html->link('ジャンル掲示板', 'javascript:return false;', array('class' => array('btn-push','navy')), "まだないです"); ?></li>
+    <li><?php if($userSession['username'] !== null){
+        echo $this->Html->link('ジャンル掲示板', array('controller' => 'Posts', 'action' => 'index'), array('class' => array('btn-push','navy')));
+            }else{
+        echo $this->Html->link('ジャンル掲示板', 'javascript:return false;', array('class' => array('btn-push','navy')), "ログイン後に掲示板も使えちゃいます！");
+            } ?></li>
 
     <li><?php if($userSession['username'] !== null){
         echo $this->Html->link('動画投稿', array('action' => 'add'),array('class' => array('btn-push','blue')));
             }else{
         echo $this->Html->link('動画投稿', 'javascript:return false;', array('class' => array('btn-push','blue')), "ログイン後に動画投稿できます");
-                         }?></li>
+                }?></li>
     </ul>
 </div>
 
-</NAV>
-
-     <?php
-         echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
-         echo $this->Paginator->numbers(array('separator' => ''));
-         echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
-    ?>
+</nav>
 
 <section id="section-fixed">
 <table>
-    <tr>
+
+
+<p>
+<form name="sorttable">
+<select class="sort-rule" name="linkselect" onChange="kakunin()">
+<option value="">並び替え</option>
+<option value="http://192.168.33.10/DDDance/movies/index/sort:play_count/direction:desc">再生回数が多い順</option>
+<option value="http://192.168.33.10/DDDance/movies/index/sort:play_count/direction:asc">再生回数が少ない順</option>
+<option value="http://192.168.33.10/DDDance/movies/index/sort:created/direction:desc">新着投稿順</option>
+<option value="http://192.168.33.10/DDDance/movies/index/sort:good/direction:desc">いいね数順</option>
+</select>
+</form>
+</p>
+
+<!--     <tr>
         <th><?php echo $this->Paginator->sort('id','ID')?></th>
         <th><?php echo $this->Paginator->sort('user_id','USER_ID')?></th>
         <th><?php echo $this->Paginator->sort('genre_id','GENRE_ID')?></th>
@@ -203,7 +225,7 @@ $(document).ready(function(){
         <th><?php echo $this->Paginator->sort('modified','MODIDIED')?></th>
         <th>Good!!</th>
         <th><?php echo $this->Paginator->sort('good','GOOD_NUMBER!!')?></th>
-    </tr>
+    </tr> -->
 
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
@@ -286,6 +308,14 @@ $(document).ready(function(){
 
 <?php endforeach; ?>
 <?php unset($movie); ?>
+
+<div class="pagineter">
+     <?php
+         echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
+         echo $this->Paginator->numbers(array('separator' => ''));
+         echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
+    ?>
+</div>
 
 <!-- watch_history -->
      <div class="movie2">

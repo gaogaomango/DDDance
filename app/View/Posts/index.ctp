@@ -1,6 +1,6 @@
 <!-- File: /app/View/Posts/index.ctp -->
 <?php  // debug($posts); ?>
-<h1>Blog posts</h1>
+<h1>掲示板</h1>
 <p><?php echo $this->Html->link("Add Post", array('action' => 'add')); ?></p>
 <div style="float:left;">
 <table>
@@ -32,7 +32,7 @@
                   ?>
         </td>
        <td>
-            <?php echo $this->Html->link($post['Genre']['genre_title'], array('controller' => 'posts', 'action' => 'category_index', $post['Genre']['id'])); ?>
+            <?php echo $this->Html->link($post['Genre']['genre_title'], array('controller' => 'posts', 'action' => 'genre_index', $post['Genre']['id'])); ?>
         </td>
         <td><?php echo $post['Post']['created']; ?></td>
     </tr>

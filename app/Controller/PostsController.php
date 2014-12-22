@@ -32,7 +32,7 @@ class PostsController extends AppController {
         $selectedGenre = $this->Genre->find('all',array('conditions'=> array('id' => $genre_id)));
 
         // Categoryモデルを使ってデータを取得
-        $genres = $this->genre->find('all');
+        $genres = $this->Genre->find('all');
 
         $this->set(compact('posts', 'genres', 'selectedGenre'));
 
