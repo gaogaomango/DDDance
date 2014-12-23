@@ -294,14 +294,12 @@ $changeLine['good'] = 'いいね数順';
             echo $this->Html->link($movie['Movie']['movie_name'], array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id'])); ?>
         </dt>
         <dd class="movie1_sumbnail"><?php
-            echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id']), array('escape' => false)); ?>
+            // echo $this->Html->link('<img src="http://192.168.33.10/DDDance/files/P'.str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT).'">', array('action' => 'view', $movie['Movie']['id'], $movie['Movie']['genre_id']), array('escape' => false)); ?>
+            <span class="cover" style="background-image:url(http://192.168.33.10/DDDance/files/P<?php echo str_pad($movie['Movie']['id'], 5, "0", STR_PAD_LEFT);?>);"></span>
         </dd>
         <dd class="movie1_sums"> 
-            概要  <br>
             <?php echo $movie['Movie']['discription'];?><br> 
-            ジャンル名 <br>
             <?php echo $movie['Genre']['genre_title'];?><br>
-            いいね数　<br>
             <?php 
             if($userSession['username'] !== null){
                 echo $this->Form->postlink('Good!!', array('action' => 'add_good', $movie['Movie']['id']));
@@ -315,9 +313,7 @@ $changeLine['good'] = 'いいね数順';
                     echo '0';
                 }
             ?><br>
-            再生回数 <br>  
             <?php echo $movie['Movie']['play_count'];?><br>
-            作成日時 <br>
             <?php echo $movie['Movie']['created']; ?><br>
         </dd>
     </div>
