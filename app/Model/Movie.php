@@ -43,6 +43,7 @@ class Movie extends AppModel {
             )
     );
 
+      //public $hasOne = 'Good';
       public $belongsTo = array('Genre','User');
       public $hasMany = array('Comment', 'Watch_history', 'Good', 'Favarite');
 }

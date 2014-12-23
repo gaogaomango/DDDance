@@ -18,7 +18,7 @@ class MoviesController extends AppController {
     //     'to' => array('type' => 'value', 'empty' => true, 'encode' => true),
     // );
 
-    public $uses = array('Movie', 'User', 'Genre', 'WatchHistory', 'Comment');
+    public $uses = array('Movie', 'User', 'Genre', 'WatchHistory', 'Comment', 'Good');
 
     public function beforeFilter() {
 
@@ -37,6 +37,8 @@ class MoviesController extends AppController {
         $users = $this->User->find('all');
 
         $genres = $this->Genre->find('all');
+
+        $goods = $this->Good->find('all');
 
 // recursiveはアソシエーションの感想設定　-1は自分、0は一つ先まで
         // $this->WatchHistory->recursive = -1;
@@ -80,7 +82,9 @@ class MoviesController extends AppController {
         }
         $comments = $this->Comment->find('all');
 
-    	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments'));
+        // $this->request->data['Movie']['good_number'] = $
+
+    	$this->set(compact('movies', 'users', 'genres', 'watchhistories', 'comments', 'goods'));
     
         $this->Movie->recursive = 0;
         $this->Prg->commonProcess();
@@ -96,24 +100,36 @@ class MoviesController extends AppController {
         // debug($this->request->data);
         if(isset($this->request->data['Movie']['search_type'])){
         if($this->request->data['Movie']['search_type'] > 0){
-        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
-        }
-        else
-        {
-        $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
+            $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
+        }else{
+            $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);
         unset($this->paginate['conditions']['Genre.id']);
         }
         }else{
             $this->paginate['conditions'] = $this->Movie->parseCriteria($this->passedArgs);      
         } 
-    
+        
+        if(isset($this->request->query['linkselect'])){
+            debug($this->request->query['linkselect']);
+            $linkselect = $this->request->query['linkselect'];
+                if($linkselect == 'playmore'){
+                $this->paginate['order'] = array('play_count' => 'desc');
+            }elseif($linkselect == 'playless'){
+                $this->paginate['order'] = array('play_count' => 'asc');
+            }elseif($linkselect == 'new'){
+                $this->paginate['order'] = array('created' => 'desc');
+            }elseif($linkselect == 'good'){
+                $this->paginate['order'] = array('good_number' => 'asc');
+            }
+            $this->set(compact('linkselect'));
+        }
+
         $this->set('movies', $this->paginate('Movie'));
 
         $movie_names = $this->Movie->find('list');
         $this->set(compact('movie_names'));
-        
 
-    }
+}
 
     public function genre_index($genre_id = null){
 
@@ -412,6 +428,55 @@ class MoviesController extends AppController {
         $cond = $this->Post->parseCriteria($this->request->data['Post']);
 
         $this->set('posts', $this->paginate('Post', $cond));
+}
+
+   public function add_good($movie_id) {
+        if ($this->request->is('get')) {
+        throw new MethodNotAllowedException();
+        }
+
+        $goods = $this->Good->find('all');
+        $movies = $this->Movie->find('all',array('conditions' => array('Movie.id' => $movie_id)));
+        $this->set(compact('goods', 'movies'));
+
+        if ($this->request->is('post')){
+            foreach ($goods as $good):
+                if($movie_id == $good['Good']['movie_id'] && $good['Good']['user_id'] == $this->Auth->user('id')){
+                    // goodテーブルの中のイイねを入れる方法。いらない
+                    // $fields = array('Good.good_number' => 'Good.good_number+1' );
+                    // $conditions = array('movie_id' => $movie_id);
+                    //     $this->Good->updateAll($fields, $conditions);
+
+                    $fields = array('Movie.good_number' => 'Movie.good_number+1' );
+                    $conditions = array('Movie.id' => $movie_id);
+                        $this->Movie->updateAll($fields, $conditions);
+                         return $this->redirect(array('action' => 'index'));
+                    }
+            endforeach;
+
+            
+        $this->Good->create('Good');
+        // debug($this->request->data);
+        //$this->Good->input('user_ID');
+        //$this->Good->input('movie_ID');
+
+        // まだいいねが押されてなかった場合
+        $this->request->data['Good']['movie_id'] = $movie_id;
+        $this->request->data['Good']['user_id'] = $this->Auth->user('id');
+
+        // $this->request->data['Good']['good_number'] = 1;
+        
+        $fields = array('Movie.good_number' => 'Movie.good_number+1' );
+                $conditions = array('Movie.id' => $movie_id);
+                $this->Movie->updateAll($fields, $conditions);
+
+    // カウントを増やして登録するコード
+        if ($this->Good->save($this->request->data)) {
+            $this->Session->setFlash(__('The Good has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+            }
+            $this->Session->setFlash(__('Unable to add the Good.'));
+        }
     }
 
 }

@@ -9,10 +9,10 @@ class Good extends AppModel {
         )
     );
 
-    public $belongsTo = array('Movie','User');
+    public $belongsTo = array('Movie', 'User');
     // public $hasMany = 'Comment';
     // public $hasMany = 'Favarite';
-    // public $hasMany = 'Good';
+    // public $hasOne = 'Movie';
     // public $hasMany = 'Watch_history';
 }
 ?>

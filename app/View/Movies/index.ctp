@@ -59,14 +59,13 @@ $(document).ready(function(){
   
 });
 
-function kakunin(){
-  obj = document.sorttable.linkselect;
-
-  index = obj.selectedIndex;
-  if (index != 0){
-    href = obj.options[index].value;
-    location.href = href;
+function FC(){
+    <!-- document.getElementById("submit").name = "onChange"; -->
+    document.getElementById("sorttable").submit();
   }
+
+  function getComboA(sel) {
+    var value = sel.value;  
 }
 <?php $this->Html->scriptEnd(); ?>
 
@@ -198,20 +197,33 @@ function kakunin(){
 <section id="section-fixed">
 <table>
 
+<!-- 今いるところに変える処理を入れてあげれば一般化 -->
+<?php
+// セレクトボックス用データ
+$changeLine['playmore'] = '再生回数が多い順';
+$changeLine['playless'] = '再生回数が少ない順';
+$changeLine['new'] = '新着投稿順';
+$changeLine['good'] = 'いいね数順';
+?>
 
 <p>
-<form name="sorttable">
-<select class="sort-rule" name="linkselect" onChange="kakunin()">
+<form id="sorttable">
+ <?php  //  debug($linkselect);?>
+<select class="sort-rule" name="linkselect" onChange="FC()">
 <option value="">並び替え</option>
-<option value="http://192.168.33.10/DDDance/movies/index/sort:play_count/direction:desc">再生回数が多い順</option>
-<option value="http://192.168.33.10/DDDance/movies/index/sort:play_count/direction:asc">再生回数が少ない順</option>
-<option value="http://192.168.33.10/DDDance/movies/index/sort:created/direction:desc">新着投稿順</option>
-<option value="http://192.168.33.10/DDDance/movies/index/sort:good/direction:desc">いいね数順</option>
+    <?php foreach($changeLine as $key=>$value): ?>
+        <?php if($linkselect == $key){ ?>
+            <option value = <?php echo $key; ?> selected ><?php echo $value; ?></option>
+        <?php }else{ ?>
+            <option value = <?php echo $key; ?> ><?php echo $value; ?></option>
+        <?php } ?>
+   <?php endforeach; ?>
 </select>
 </form>
 </p>
 
-<!--     <tr>
+<!-- ボタンを押してソートする形式 -->
+<!--　<tr>
         <th><?php echo $this->Paginator->sort('id','ID')?></th>
         <th><?php echo $this->Paginator->sort('user_id','USER_ID')?></th>
         <th><?php echo $this->Paginator->sort('genre_id','GENRE_ID')?></th>
@@ -230,7 +242,7 @@ function kakunin(){
     <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
 
     <?php foreach ($movies as $movie): ?>
-
+<!-- web用のページセクション -->
     <tr>
         <td><?php echo $movie['Movie']['id']; ?></td>
         <td><?php echo $movie['User']['id']; ?></td>
@@ -261,14 +273,15 @@ function kakunin(){
         </td>
         <td><?php 
             if($userSession['username'] !== null){
-                echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
+                echo $this->Form->postlink('Good!!', array('action' => 'add_good', $movie['Movie']['id']));
             }else{
                 echo 'Good!!';
         }
         ?>
         </td>
-        <td><?php if(isset($movie['Good'])){
-            echo count($movie['Good']);
+        <td><?php if(isset($movie['Movie']['good_number'])){
+            echo $movie['Movie']['good_number'];
+            // echo count($movie['Movie']['good_number']);
             }else{
                 echo '0';
             }
@@ -291,18 +304,21 @@ function kakunin(){
             いいね数　<br>
             <?php 
             if($userSession['username'] !== null){
-                echo $this->Form->postlink('Good!!', array('controller' => 'goods', 'action' => 'add', $movie['Movie']['id']));
+                echo $this->Form->postlink('Good!!', array('action' => 'add_good', $movie['Movie']['id']));
             }else{
-                echo 'Good!!';
+                echo 'Good!!->';
             }
-            if(isset($movie['Good'])){
-                echo count($movie['Good']);
+            if(isset($movie['Movie']['good_number'])){
+                echo $movie['Movie']['good_number'];
+                // echo count($movie['Good']['good_number']);
                 }else{
                     echo '0';
                 }
             ?><br>
             再生回数 <br>  
             <?php echo $movie['Movie']['play_count'];?><br>
+            作成日時 <br>
+            <?php echo $movie['Movie']['created']; ?><br>
         </dd>
     </div>
 
@@ -318,6 +334,8 @@ function kakunin(){
 </div>
 
 <!-- watch_history -->
+
+<!-- モバイル用履歴 -->
      <div class="movie2">
         <?php if($userSession['username'] !== null){
             foreach ($watchhistories as $watchhistory): ?>
@@ -343,45 +361,8 @@ else{
 </section>
 </div>
 
-<!-- genre index -->
-<div>
-<h1>Genre</h1>
-<table>
-    <tr>
-        <th>genre_title</th>
-    </tr>
-
-    <!-- ここから、$posts配列をループして、投稿記事の情報を表示 -->
-
-    <?php foreach ($genres as $genre): ?>
-<!--     <tr>
-        <td>
-            <?php echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'movies', 'action' => 'genre_index', $genre['Genre']['id'])); 
-        ?>
-        </td>
-    </tr> -->
-
-        <tr>
-     <td>
-        <?php 
-            if (isset ($selectedGenre)){
-                if ($selectedGenre[0]['Genre']['id'] == $genre['Genre']['id']){
-                echo $genre['Genre']['genre_title'];
-            }else{
-                echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'movies','action' => 'genre_index', $genre['Genre']['id']));
-                 }
-            }else{
-                echo $this->Html->link($genre['Genre']['genre_title'], array('controller' => 'movies','action' => 'genre_index', $genre['Genre']['id']));
-            }
-        ?>
-    </td>
-    </tr>
-    <?php endforeach; ?>
-    <?php //unset($genre); ?>
-</table>
-</div>
-
 <!-- watch_history index -->
+<!-- web用履歴 -->
 <?php 
 if($userSession['username'] !== null){
     ?>
