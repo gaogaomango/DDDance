@@ -447,10 +447,11 @@ class MoviesController extends AppController {
                     // $conditions = array('movie_id' => $movie_id);
                     //     $this->Good->updateAll($fields, $conditions);
 
-                    $fields = array('Movie.good_number' => 'Movie.good_number+1' );
-                    $conditions = array('Movie.id' => $movie_id);
-                        $this->Movie->updateAll($fields, $conditions);
-                         return $this->redirect(array('action' => 'index'));
+                // 下の機能は実際はユーザーとムービーが一致しないとviewに出ないからいらない機能笑
+                    // $fields = array('Movie.good_number' => 'Movie.good_number+1' );
+                    // $conditions = array('Movie.id' => $movie_id);
+                    //     $this->Movie->updateAll($fields, $conditions);
+                    //      return $this->redirect(array('action' => 'index'));
                     }
             endforeach;
 
@@ -466,7 +467,7 @@ class MoviesController extends AppController {
 
         // $this->request->data['Good']['good_number'] = 1;
         
-        $fields = array('Movie.good_number' => 'Movie.good_number+1' );
+        $fields = array('Movie.good_number' => 'Movie.good_number+1');
                 $conditions = array('Movie.id' => $movie_id);
                 $this->Movie->updateAll($fields, $conditions);
 
@@ -477,7 +478,40 @@ class MoviesController extends AppController {
             }
             $this->Session->setFlash(__('Unable to add the Good.'));
         }
-    }
+}
+
+   public function delete_good($movie_id) {
+        if ($this->request->is('get')) {
+        throw new MethodNotAllowedException();
+        }
+
+        $goods = $this->Good->find('all');
+        $movies = $this->Movie->find('all',array('conditions' => array('Movie.id' => $movie_id)));
+        $this->set(compact('goods', 'movies'));
+
+        if ($this->request->is('post')){
+            foreach ($goods as $good):
+                if($movie_id == $good['Good']['movie_id'] && $good['Good']['user_id'] == $this->Auth->user('id')){
+                    // goodテーブルの中のイイねを入れる方法。いらない
+                    // $fields = array('Good.good_number' => 'Good.good_number+1' );
+                    // $conditions = array('movie_id' => $movie_id);
+                    //     $this->Good->updateAll($fields, $conditions);
+
+                    $conditions = array('Good.movie_id' => $good['Good']['movie_id'], $good['Good']['user_id'] => $this->Auth->user('id'));
+                    if ($this->Good->deleteAll($conditions)) {
+                        $this->Session->setFlash('いいねを取り消しました！');
+                    } else {
+                        $this->Session->setFlash('取り消しに失敗しました');
+                    }
+
+                    $fields = array('Movie.good_number' => 'Movie.good_number-1' );
+                    $conditions = array('Movie.id' => $movie_id);
+                        $this->Movie->updateAll($fields, $conditions);
+                         return $this->redirect(array('action' => 'index'));
+                    }
+            endforeach;
+        }
+}
 
 }
 ?>

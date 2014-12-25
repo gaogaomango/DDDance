@@ -17,6 +17,7 @@ body {
   font-weight: 300;
   text-align: center;
   margin: 0;
+  color: #30292F;
 
 }
 
@@ -355,7 +356,7 @@ ul.genre-list li {
 }
 
 .movie1_title{
-  background: #2D579A;
+  background: #4F7CAC;
   /*float: left;*/
   /*border: 1px solid #000000;*/
   /*padding: 100px #000000;*/
@@ -397,6 +398,39 @@ ul.genre-list li {
   height: 150px;
   font-size: 25px;
   text-align: left;
+}
+
+.movie1_sums_explanation{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.discription{
+  font-size: 15px;
+  font-style: italic;
+}
+
+.genre_title{
+  font-size: 10px;
+  font-style: italic;
+}
+
+.good{
+  font-size: 10px;
+  font-style: italic;
+}
+
+.play_count{
+  font-size: 10px;
+  font-style: italic;
+  color: #B3C0CA;
+}
+
+.created{
+  font-size: 10px;
+  font-style: italic;
+  color: #B3C0CA;
 }
 
 .movie2{
