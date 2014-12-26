@@ -447,7 +447,7 @@ class MoviesController extends AppController {
                     // $conditions = array('movie_id' => $movie_id);
                     //     $this->Good->updateAll($fields, $conditions);
 
-                // 下の機能は実際はユーザーとムービーが一致しないとviewに出ないからいらない機能笑
+                // 下の機能は実際はユーザーとムービーが一致しないとviewに出ないからいらない機能
                     // $fields = array('Movie.good_number' => 'Movie.good_number+1' );
                     // $conditions = array('Movie.id' => $movie_id);
                     //     $this->Movie->updateAll($fields, $conditions);
@@ -492,13 +492,8 @@ class MoviesController extends AppController {
         if ($this->request->is('post')){
             foreach ($goods as $good):
                 if($movie_id == $good['Good']['movie_id'] && $good['Good']['user_id'] == $this->Auth->user('id')){
-                    // goodテーブルの中のイイねを入れる方法。いらない
-                    // $fields = array('Good.good_number' => 'Good.good_number+1' );
-                    // $conditions = array('movie_id' => $movie_id);
-                    //     $this->Good->updateAll($fields, $conditions);
-
-                    $conditions = array('Good.movie_id' => $good['Good']['movie_id'], $good['Good']['user_id'] => $this->Auth->user('id'));
-                    if ($this->Good->deleteAll($conditions)) {
+                   $conditions = array('Good.movie_id' => $good['Good']['movie_id'], $good['Good']['user_id'] => $this->Auth->user('id'));
+                   if ($this->Good->deleteAll($conditions)) {
                         $this->Session->setFlash('いいねを取り消しました！');
                     } else {
                         $this->Session->setFlash('取り消しに失敗しました');

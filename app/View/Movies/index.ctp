@@ -271,24 +271,22 @@ $changeLine['good'] = 'いいね数順';
         </td>
         <td><?php echo $this->Html->link('look favarite lists' , array('controller' => 'favarites', 'action' => 'index')); ?>
         </td>
-        <td><?php 
+        <td><?php　//こいつを他のとこにも！！！！！！！！！！！ 
             if($userSession['username'] !== null){
             foreach ($goods as $good):
                 if($movie['Movie']['id']==$good['Good']['movie_id'] && $good['Good']['user_id']==$userSession['id']){
                     $existed_movie_id = $good['Good']['movie_id'];
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // $existed_movie_id = $movie['Movie']['id'];
                     $existed_user_id = $userSession['id'];
                 }
                 endforeach;
- debug($existed_movie_id,$existed_user_id);
-                
 
                 if(isset($existed_movie_id, $existed_user_id)){          
                 echo $this->Form->postlink('Good取り消し', array('action' => 'delete_good', $movie['Movie']['id']));
                 }else{
                 echo $this->Form->postlink('Good!!', array('action' => 'add_good', $movie['Movie']['id']));
                 }
+                }else{
+                    echo 'Good!!(ログインすれば使えるよ！)';
                 }
                 unset($existed_movie_id,$existed_user_id);
         ?></td>
@@ -315,17 +313,29 @@ $changeLine['good'] = 'いいね数順';
                 <li class="discription"><?php echo $movie['Movie']['discription'];?></li><br> 
                 <li class="genre_title"><?php echo $movie['Genre']['genre_title'];?></li><br>
                 <li class="good"><?php 
-                if($userSession['username'] !== null){
-                    echo $this->Form->postlink('Good!! ', array('action' => 'add_good', $movie['Movie']['id']));
-                }else{
-                    echo 'Good!! ';
-                }
-                if(isset($movie['Movie']['good_number'])){
-                    echo $movie['Movie']['good_number'];
-                    // echo count($movie['Good']['good_number']);
+                    if($userSession['username'] !== null){
+                        foreach ($goods as $good):
+                    if($movie['Movie']['id']==$good['Good']['movie_id'] && $good['Good']['user_id']==$userSession['id']){
+                    $existed_movie_id = $good['Good']['movie_id'];
+                    $existed_user_id = $userSession['id'];
+                    }
+                        endforeach;
+
+                    if(isset($existed_movie_id, $existed_user_id)){          
+                    echo $this->Form->postlink('Good取り消し', array('action' => 'delete_good', $movie['Movie']['id']));
                     }else{
-                        echo '0';
-                    } ?>
+                    echo $this->Form->postlink('Good!!', array('action' => 'add_good', $movie['Movie']['id']));
+                    }
+                    }else{
+                    echo 'Good(ログインすれば使えるよ！)　';
+                    }
+                    unset($existed_movie_id,$existed_user_id);
+
+                    if(isset($movie['Movie']['good_number'])){
+                        echo $movie['Movie']['good_number'];
+                        }else{
+                            echo '0';
+                        } ?>
                 </li><br>
                 <li class="play_count">再生回数 <?php echo $movie['Movie']['play_count'];?>回<br></li>
                 <li class="created"><?php echo $movie['Movie']['created']; ?><br></li>
